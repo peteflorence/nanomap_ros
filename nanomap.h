@@ -7,8 +7,6 @@
 #include <pcl/point_types.h>
 
 #include "pose_manager.h"
-#include "point_cloud_manager.h"
-
 #include "structured_point_cloud_chain.h"
 #include "fov_evaluator.h"
 
@@ -36,7 +34,7 @@ class NanoMap {
   void AddPose(NanoMapPose pose);
   void DeleteMemoryBeforeTime(NanoMapTime time);
 
-  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime time);
+  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time);
   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
 
   NanoMapKnnReply KnnQuery(NanoMapKnnArgs);

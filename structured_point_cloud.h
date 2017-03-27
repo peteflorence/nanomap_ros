@@ -14,13 +14,17 @@ typedef Eigen::Matrix<float, 4, 4>  Matrix4f;
 class StructuredPointCloud {
  public:
 
-  StructuredPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr) {
+  StructuredPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time) {
 
+  };
+
+  NanoMapTime GetTime() {
+  	return _cloud_time;
   };
 
  private:
  	pcl::PointCloud<pcl::PointXYZ>::Ptr _cloud_ptr;
-
+ 	NanoMapTime _cloud_time;
 };
 
 #endif

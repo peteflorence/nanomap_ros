@@ -23,7 +23,8 @@ class PoseManager {
   void AddPose(NanoMapPose pose){};
   void DeleteMemoryBeforeTime(NanoMapTime time){};
 
-  NanoMapPose GetPoseAtTime(NanoMapTime time);
+  bool HavePoseAtTime(NanoMapTime query_time);
+  NanoMapPose GetPoseAtTime(NanoMapTime query_time);
   NanoMapPose GetRelativeTransform(NanoMapTime time_from, NanoMapTime time_to);
 
  private:

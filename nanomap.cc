@@ -7,7 +7,7 @@ void NanoMap::AddPose(NanoMapPose pose) {
 
   // if there are point clouds on buffer, see if can add them to chain now
 
-
+  // update transform to latest point cloud
 }
 
 void NanoMap::DeleteMemoryBeforeTime(NanoMapTime time) {
@@ -15,10 +15,17 @@ void NanoMap::DeleteMemoryBeforeTime(NanoMapTime time) {
 }
 
 
-void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime time) {
-  // if have recent enough pose, add point clouds to chain
+void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time) {
+  // build structured_point_cloud
+  StructuredPointCloud new_cloud = StructuredPointCloud(cloud_ptr, cloud_time);
 
-  // if don't, leave it in buffer
+  if (pose_manager.HavePoseAtTime(cloud_time)) {
+    // add point cloud to chain
+  }
+  else {
+    point_cloud_buffer.push_back(new_cloud);
+  }
+
 
 }
 
