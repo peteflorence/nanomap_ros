@@ -18,8 +18,10 @@ class NanoMap {
   NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
 
  private:
+  void TryAddingPointCloudBufferToChain();
+
   PoseManager pose_manager;
-  std::vector<StructuredPointCloud> point_cloud_buffer;
+  std::deque<StructuredPointCloud> point_cloud_buffer;
 
   StructuredPointCloudChain structured_point_cloud_chain;
 

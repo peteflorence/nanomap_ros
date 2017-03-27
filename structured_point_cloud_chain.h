@@ -11,10 +11,15 @@ struct NextEdgeVertex {
 };
 
 class StructuredPointCloudChain {
- public:
+  public:
 
- private:
- 	std::vector<NextEdgeVertex> chain;
+  	NanoMapTime GetMostRecentCloudTime();
+  	void UpdateEdge(uint32_t index, Matrix4f relative_transform);
+  	void AddNextEdgeVertex(Matrix4f new_edge, StructuredPointCloud new_cloud);
+
+
+  private:
+	std::vector<NextEdgeVertex> chain;
 };
 
 #endif
