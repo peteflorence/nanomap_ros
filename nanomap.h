@@ -1,0 +1,47 @@
+#ifndef MOTION_SELECTOR_H
+#define MOTION_SELECTOR_H
+
+#include <Eigen/Dense>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+
+#include "pose_manager.h"
+#include "structured_point_cloud.h"
+#include "structured_point_cloud_chain.h"
+#include "fov_evaluator.h"
+
+typedef double Scalar;
+typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
+typedef Eigen::Matrix<Scalar, 3, 3> Matrix3;
+typedef Eigen::Matrix<Scalar, 4, 4> Matrix4;
+typedef Eigen::Matrix<float, 4, 4>  Matrix4f; 
+
+
+struct NanoMapKnnArgs {
+  Vector3               query_point_body_frame;
+};
+
+struct NanoMapKnnReply {
+  uint8_t               fov_status;
+  uint32_t              frame_id;
+  Vector3               query_point_in_frame_id;
+  std::vector<Vector3>  closest_points_in_frame_id;
+};
+
+class NanoMap {
+ public:
+
+  void AddPose(Matrix4f, uint32_t time_sec, uint32_t time_nsec){};
+  void DeleteMemoryBeforeTime(uint32_t time_sec, uint32_t time_nsec){};
+
+  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& xyz_cloud_ptr, uint32_t time_sec, uint32_t time_nsec){};
+  void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
+
+  NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
+
+ private:
+
+};
+
+#endif
