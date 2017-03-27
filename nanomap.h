@@ -7,6 +7,8 @@
 #include <pcl/point_types.h>
 
 #include "pose_manager.h"
+#include "point_cloud_manager.h"
+
 #include "structured_point_cloud_chain.h"
 #include "fov_evaluator.h"
 
@@ -14,7 +16,7 @@ typedef double Scalar;
 typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
 typedef Eigen::Matrix<Scalar, 3, 3> Matrix3;
 typedef Eigen::Matrix<Scalar, 4, 4> Matrix4;
-typedef Eigen::Matrix<float, 4, 4>  Matrix4f; 
+typedef Eigen::Matrix<float, 4, 4>  Matrix4f;
 
 
 struct NanoMapKnnArgs {
@@ -31,20 +33,18 @@ struct NanoMapKnnReply {
 class NanoMap {
  public:
 
-  void AddPose(NanoMapPose pose) {
-    pose_manager.AddPose(pose);
-  };
-  void DeleteMemoryBeforeTime(NanoMapTime time) {
-    pose_manager.DeleteMemoryBeforeTime(time);
-  };
+  void AddPose(NanoMapPose pose);
+  void DeleteMemoryBeforeTime(NanoMapTime time);
 
-  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime time){};
+  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime time);
   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
 
   NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
 
  private:
   PoseManager pose_manager;
+  std::vector<StructuredPointCloud> point_cloud_buffer;
+
   StructuredPointCloudChain structured_point_cloud_chain;
 
 };
