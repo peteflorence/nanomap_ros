@@ -21,10 +21,10 @@ struct NanoMapKnnArgs {
 
 enum class NanoMapFovStatus { 
 	behind,
-	lateral_outside_fov, 
+	laterally_outside_fov, 
 	beyond_sensor_horizon, 
 	occluded, 
-	free
+	free_space
 }; 
 
 struct NanoMapKnnReply {

@@ -21,7 +21,7 @@ class NanoMap {
   void TryAddingPointCloudBufferToChain();
 
   PoseManager pose_manager;
-  FovEvaluator fov_evaluator;
+  FovEvaluatorPtr fov_evaluator;
 
   std::deque<StructuredPointCloudPtr> point_cloud_buffer;
   StructuredPointCloudChain structured_point_cloud_chain;

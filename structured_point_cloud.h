@@ -3,6 +3,7 @@
 
 #include "nanomap_types.h"
 #include "kd_tree_two.h"
+#include "fov_evaluator.h"
 
 
 class StructuredPointCloud {
@@ -17,9 +18,14 @@ class StructuredPointCloud {
   	return _cloud_time;
   };
 
+  PointCloudPtr GetPointCloudPtr(){
+  	return _cloud_ptr;
+  };
+
  private:
+ 	FovEvaluatorPtr fov_evaluator;
  	KDTreeTwo<double> _kd_tree;
- 	pcl::PointCloud<pcl::PointXYZ>::Ptr _cloud_ptr;
+ 	PointCloudPtr _cloud_ptr;
  	NanoMapTime _cloud_time;
 };
 
