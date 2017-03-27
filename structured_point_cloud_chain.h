@@ -6,8 +6,8 @@
 
 
 struct EdgeVertex {
-	Matrix4f			 edge;
-	StructuredPointCloud vertex;
+	Matrix4f			 	edge;
+	StructuredPointCloudPtr vertex;
 };
 
 class StructuredPointCloudChain {
@@ -17,7 +17,7 @@ class StructuredPointCloudChain {
   	void DeleteMemoryBeforeTime(NanoMapTime delete_time);
 
   	void UpdateEdge(uint32_t index, Matrix4f relative_transform);
-  	void AddNextEdgeVertex(Matrix4f new_edge, StructuredPointCloud new_cloud);
+  	void AddNextEdgeVertex(Matrix4f new_edge, StructuredPointCloudPtr new_cloud);
 
 
   private:

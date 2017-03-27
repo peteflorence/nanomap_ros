@@ -1,4 +1,4 @@
-#include "nanoflann.hpp"
+#include "nanoflann_two.hpp"
 
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
@@ -43,7 +43,7 @@ struct PointCloud
 };
 
 template <typename num_t>
-class KDTree {
+class KDTreeTwo {
 public:
 	std::vector<pcl::PointXYZ> closest_pts;
 	std::vector<num_t> squared_distances;
@@ -54,7 +54,7 @@ public:
 	3 /* dim */
 	> my_kd_tree_t;
 
-	KDTree() : cloud(), index(3, cloud, nanoflann::KDTreeSingleIndexAdaptorParams(10 /* max leaf */)) { };
+	KDTreeTwo() : cloud(), index(3, cloud, nanoflann::KDTreeSingleIndexAdaptorParams(10 /* max leaf */)) { };
 
 	void InitializeNew(pcl::PointCloud<pcl::PointXYZ>::Ptr const& xyz_cloud_new) {
 		Initialize(xyz_cloud_new, true);
