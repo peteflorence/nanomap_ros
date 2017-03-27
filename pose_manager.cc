@@ -15,3 +15,7 @@ void PoseManager::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
 		}
 	}
 }
+
+NanoMapTime PoseManager::GetMostRecentPoseTime() {
+	return poses.back().time;
+}
