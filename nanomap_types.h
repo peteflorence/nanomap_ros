@@ -34,8 +34,6 @@ struct NanoMapKnnReply {
   std::vector<Vector3>  closest_points_in_frame_id;
 };
 
-
-
 struct NanoMapTime {
   uint32_t sec;
   uint32_t nsec;

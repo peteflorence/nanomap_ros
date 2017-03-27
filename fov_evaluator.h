@@ -6,7 +6,7 @@
 class FovEvaluator {
  public:
    NanoMapFovStatus EvaluateFov(PointCloudPtr, Vector3 position);
-   void setCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
+   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
 
  private:
 

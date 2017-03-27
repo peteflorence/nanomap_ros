@@ -14,7 +14,7 @@ void NanoMap::AddPose(NanoMapPose pose) {
 
 void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time) {
   // build structured_point_cloud and add to buffer
-  StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time);
+  StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, fov_evaluator_ptr);
   point_cloud_buffer.push_back(new_cloud_ptr);
 
   // try adding point clouds off buffer to chain
@@ -27,7 +27,8 @@ void NanoMap::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
 }
 
 void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info) {
-  return;
+  fov_evaluator_ptr = std::make_shared<FovEvaluator>();
+  fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
 }
 
 void NanoMap::UpdateChainWithLatestPose() {

@@ -50,7 +50,7 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr point_cloud_ptr, Vector
     return NanoMapFovStatus::free_space;
 }
 
-void FovEvaluator::setCameraInfo(double bin, double width, double height, Matrix3 K_camera_info) {
+void FovEvaluator::SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info) {
   if (bin < 1.0) {binning = 1.0;}
   else {binning = bin;}
   num_x_pixels = width / binning;
