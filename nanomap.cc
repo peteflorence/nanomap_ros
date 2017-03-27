@@ -19,7 +19,6 @@ void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr
 
   // try adding point clouds off buffer to chain
   TryAddingPointCloudBufferToChain();
-
 }
 
 void NanoMap::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
