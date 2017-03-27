@@ -22,7 +22,6 @@ class NanoMap {
 
   PoseManager pose_manager;
   std::deque<StructuredPointCloud> point_cloud_buffer;
-
   StructuredPointCloudChain structured_point_cloud_chain;
 
 };

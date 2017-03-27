@@ -2,6 +2,7 @@
 #define STRUCTURED_POINT_CLOUD_H
 
 #include "nanomap_types.h"
+#include "kd_tree.h"
 
 class StructuredPointCloud {
  public:

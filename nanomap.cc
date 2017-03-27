@@ -13,13 +13,11 @@ void NanoMap::AddPose(NanoMapPose pose) {
 }
 
 void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time) {
-  // build structured_point_cloud
+  // build structured_point_cloud and add to buffer
   StructuredPointCloud new_cloud = StructuredPointCloud(cloud_ptr, cloud_time);
-
-  // add it to buffer
   point_cloud_buffer.push_back(new_cloud);
 
-  // try adding point clouds off buffer
+  // try adding point clouds off buffer to chain
   TryAddingPointCloudBufferToChain();
 
 }
