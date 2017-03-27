@@ -1,18 +1,18 @@
 #include "fov_evaluator.h"
 
-bool FovEvaluator::IsBehind(Vector3 position) {
+bool FovEvaluator::IsBehind(Vector3 position) const {
   return (position(2) < -0.5);
 }
 
-bool FovEvaluator::IsBeyondSensorHorizon(Vector3 position) {
+bool FovEvaluator::IsBeyondSensorHorizon(Vector3 position) const {
   return (position(2) > 10.0);
 }
 
-bool FovEvaluator::IsOutsideDeadBand(Vector3 position) {
+bool FovEvaluator::IsOutsideDeadBand(Vector3 position) const {
   return (position.squaredNorm() > 0.5);
 }
 
-NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr point_cloud_ptr, Vector3 position) {
+NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr, Vector3 position) const {
     if (IsBehind(position)) {
       return NanoMapFovStatus::behind;
     }
@@ -50,7 +50,7 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr point_cloud_ptr, Vector
     return NanoMapFovStatus::free_space;
 }
 
-void FovEvaluator::SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info) {
+void FovEvaluator::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
   if (bin < 1.0) {binning = 1.0;}
   else {binning = bin;}
   num_x_pixels = width / binning;

@@ -9,12 +9,12 @@
 class NanoMap {
  public:
 
-  void AddPose(NanoMapPose pose);
-  void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime cloud_time);
-  void DeleteMemoryBeforeTime(NanoMapTime delete_time);
-  void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
+  void AddPose(NanoMapPose const& pose);
+  void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time);
+  void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
+  void SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info);
 
-  NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
+  NanoMapKnnReply KnnQuery(NanoMapKnnArgs const& args) const;
 
  private:
   void UpdateChainWithLatestPose();

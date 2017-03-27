@@ -5,14 +5,14 @@
 
 class FovEvaluator {
  public:
-   NanoMapFovStatus EvaluateFov(PointCloudPtr, Vector3 position);
-   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
+   NanoMapFovStatus EvaluateFov(PointCloudPtr const& cloud_ptr, Vector3 position) const;
+   void SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info);
 
  private:
 
-  bool IsBehind(Vector3 position);
-  bool IsOutsideDeadBand(Vector3 position);
-  bool IsBeyondSensorHorizon(Vector3 position);
+  bool IsBehind(Vector3 position) const;
+  bool IsOutsideDeadBand(Vector3 position) const;
+  bool IsBeyondSensorHorizon(Vector3 position) const;
 
   Matrix3 K;
   double binning = 4.0;

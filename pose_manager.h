@@ -6,14 +6,14 @@
 class PoseManager {
  public:
 
-  void AddPose(NanoMapPose pose);
-  void DeleteMemoryBeforeTime(NanoMapTime time);
+  void AddPose(NanoMapPose const& pose);
+  void DeleteMemoryBeforeTime(NanoMapTime const& time);
 
-  NanoMapTime GetMostRecentPoseTime();
-  bool CanInterpolatePoseAtTime(NanoMapTime query_time);
-  bool CanInterpolatePosesForTwoTimes(NanoMapTime time_from, NanoMapTime time_to);
-  NanoMapPose GetPoseAtTime(NanoMapTime query_time);
-  Matrix4f GetRelativeTransformFromTo(NanoMapTime time_from, NanoMapTime time_to);
+  NanoMapTime GetMostRecentPoseTime() const;
+  bool CanInterpolatePoseAtTime(NanoMapTime const& query_time) const;
+  bool CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, NanoMapTime const& time_to) const;
+  NanoMapPose GetPoseAtTime(NanoMapTime const& query_time);
+  Matrix4f GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
 
  private:
   std::deque<NanoMapPose> poses;

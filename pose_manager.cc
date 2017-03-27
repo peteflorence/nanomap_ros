@@ -1,10 +1,10 @@
 #include "pose_manager.h"
 
-void PoseManager::AddPose(NanoMapPose pose) {
+void PoseManager::AddPose(NanoMapPose const& pose) {
 	poses.push_back(pose);
 }
 
-void PoseManager::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
+void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 	while (poses.size() >= 0) {
 		NanoMapPose i = poses.at(0); 
 		if ( (i.time.sec <= delete_time.sec) && (i.time.nsec < delete_time.nsec) ) {
@@ -16,11 +16,11 @@ void PoseManager::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
 	}
 }
 
-NanoMapTime PoseManager::GetMostRecentPoseTime() {
+NanoMapTime PoseManager::GetMostRecentPoseTime() const {
 	return poses.back().time;
 }
 
-bool PoseManager::CanInterpolatePoseAtTime(NanoMapTime query_time) {
+bool PoseManager::CanInterpolatePoseAtTime(NanoMapTime const& query_time) const {
 	NanoMapTime oldest_time = poses.front().time;
 	NanoMapTime newest_time = poses.back().time;
 
@@ -34,6 +34,6 @@ bool PoseManager::CanInterpolatePoseAtTime(NanoMapTime query_time) {
 	return true;
 }
 
-bool PoseManager::CanInterpolatePosesForTwoTimes(NanoMapTime time_from, NanoMapTime time_to) {
+bool PoseManager::CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, NanoMapTime const& time_to) const {
 	return (CanInterpolatePoseAtTime(time_from) && CanInterpolatePoseAtTime(time_to) );	
 }

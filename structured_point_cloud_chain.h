@@ -13,11 +13,11 @@ struct EdgeVertex {
 class StructuredPointCloudChain {
   public:
 
-  	NanoMapTime GetMostRecentCloudTime();
-  	void DeleteMemoryBeforeTime(NanoMapTime delete_time);
+  	NanoMapTime GetMostRecentCloudTime() const;
+  	void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
 
-  	void UpdateEdge(uint32_t index, Matrix4f relative_transform);
-  	void AddNextEdgeVertex(Matrix4f new_edge, StructuredPointCloudPtr new_cloud);
+  	void UpdateEdge(uint32_t index, Matrix4f const& relative_transform);
+  	void AddNextEdgeVertex(Matrix4f const& new_edge, StructuredPointCloudPtr const& new_cloud);
 
 
   private:

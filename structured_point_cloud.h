@@ -9,17 +9,17 @@
 class StructuredPointCloud {
  public:
 
-  StructuredPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time, FovEvaluatorPtr fov_evaluator) {
+  StructuredPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, FovEvaluatorPtr const& fov_evaluator) {
   	cloud_ptr_ = cloud_ptr;
   	kd_tree_.Initialize(cloud_ptr_, false);
   	fov_evaluator_ = fov_evaluator;
   };
 
-  NanoMapTime GetTime() {
+  NanoMapTime GetTime() const{
   	return cloud_time_;
   };
 
-  PointCloudPtr GetPointCloudPtr(){
+  PointCloudPtr GetPointCloudPtr() const{
   	return cloud_ptr_;
   };
 

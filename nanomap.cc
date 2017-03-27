@@ -2,7 +2,7 @@
 
 #define num_nearest_neighbors 1
 
-void NanoMap::AddPose(NanoMapPose pose) {
+void NanoMap::AddPose(NanoMapPose const& pose) {
   pose_manager.AddPose(pose);
 
   // try adding point clouds off buffer
@@ -12,7 +12,7 @@ void NanoMap::AddPose(NanoMapPose pose) {
   UpdateChainWithLatestPose();
 }
 
-void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time) {
+void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time) {
   // build structured_point_cloud and add to buffer
   StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, fov_evaluator_ptr);
   point_cloud_buffer.push_back(new_cloud_ptr);
@@ -21,12 +21,12 @@ void NanoMap::AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr
   TryAddingPointCloudBufferToChain();
 }
 
-void NanoMap::DeleteMemoryBeforeTime(NanoMapTime delete_time) {
+void NanoMap::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
   pose_manager.DeleteMemoryBeforeTime(delete_time);
   structured_point_cloud_chain.DeleteMemoryBeforeTime(delete_time);
 }
 
-void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info) {
+void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
   fov_evaluator_ptr = std::make_shared<FovEvaluator>();
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
 }
