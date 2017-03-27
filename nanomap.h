@@ -10,7 +10,7 @@ class NanoMap {
  public:
 
   void AddPose(NanoMapPose pose);
-  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& cloud_ptr, NanoMapTime cloud_time);
+  void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime cloud_time);
   void DeleteMemoryBeforeTime(NanoMapTime delete_time);
   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
 
