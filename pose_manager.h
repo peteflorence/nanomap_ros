@@ -6,8 +6,8 @@
 class PoseManager {
  public:
 
-  void AddPose(NanoMapPose pose){};
-  void DeleteMemoryBeforeTime(NanoMapTime time){};
+  void AddPose(NanoMapPose pose);
+  void DeleteMemoryBeforeTime(NanoMapTime time);
 
   NanoMapTime GetMostRecentPoseTime();
   bool CanInterpolatePoseAtTime(NanoMapTime query_time);
@@ -16,7 +16,7 @@ class PoseManager {
   Matrix4f GetRelativeTransformFromTo(NanoMapTime time_from, NanoMapTime time_to);
 
  private:
-  std::vector<NanoMapPose> poses;
+  std::deque<NanoMapPose> poses;
 
 };
 

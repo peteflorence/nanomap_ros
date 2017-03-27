@@ -1,6 +1,8 @@
 #ifndef NANOMAP_TYPES_H
 #define NANOMAP_TYPES_H
 
+#include <iostream>
+
 #include <Eigen/Dense>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
@@ -24,8 +26,8 @@ struct NanoMapKnnReply {
 };
 
 struct NanoMapTime {
-  uint32_t time_sec;
-  uint32_t time_nsec;
+  uint32_t sec;
+  uint32_t nsec;
 };
 
 struct NanoMapPose {

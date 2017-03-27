@@ -5,7 +5,7 @@
 #include "structured_point_cloud.h"
 
 
-struct NextEdgeVertex {
+struct EdgeVertex {
 	Matrix4f			 edge;
 	StructuredPointCloud vertex;
 };
@@ -21,7 +21,7 @@ class StructuredPointCloudChain {
 
 
   private:
-	std::vector<NextEdgeVertex> chain;
+	std::deque<EdgeVertex> chain;
 };
 
 #endif
