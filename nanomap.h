@@ -35,11 +35,11 @@ class NanoMap {
   void AddPose(NanoMapPose pose) {
     pose_manager.AddPose(pose);
   };
-  void DeleteMemoryBeforeTime(uint32_t time_sec, uint32_t time_nsec) {
-    pose_manager.DeleteMemoryBeforeTime(time_sec, time_nsec);
+  void DeleteMemoryBeforeTime(NanoMapTime time) {
+    pose_manager.DeleteMemoryBeforeTime(time);
   };
 
-  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& xyz_cloud_ptr, uint32_t time_sec, uint32_t time_nsec){};
+  void AddPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr const& xyz_cloud_ptr, NanoMapTime time){};
   void SetCameraInfo(double bin, double width, double height, Matrix3 K_camera_info);
 
   NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
