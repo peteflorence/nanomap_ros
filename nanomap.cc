@@ -41,7 +41,8 @@ void NanoMap::UpdateChainWithLatestPose() {
 void NanoMap::TryAddingPointCloudBufferToChain() {
   while (point_cloud_buffer.size() > 0) {
 
-    NanoMapTime new_cloud_time = point_cloud_buffer.at(0)->GetTime();
+    StructuredPointCloudPtr new_cloud_ptr = point_cloud_buffer.at(0);
+    NanoMapTime new_cloud_time = new_cloud_ptr->GetTime();
 
     if (pose_manager.CanInterpolatePoseAtTime(new_cloud_time)) {
       NanoMapTime previous_cloud_time = structured_point_cloud_chain.GetMostRecentCloudTime();
@@ -50,7 +51,7 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
 
       NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
       Matrix4f new_edge = pose_manager.GetRelativeTransformFromTo(last_pose_time, new_cloud_time);
-      structured_point_cloud_chain.AddNextEdgeVertex(new_edge, point_cloud_buffer.at(0));
+      structured_point_cloud_chain.AddNextEdgeVertex(new_edge, new_cloud_ptr);
 
       point_cloud_buffer.pop_front();
 

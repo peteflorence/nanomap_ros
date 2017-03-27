@@ -19,12 +19,22 @@ struct NanoMapKnnArgs {
   Vector3               query_point_body_frame;
 };
 
+enum class NanoMapFovStatus { 
+	behind,
+	lateral_outside_fov, 
+	beyond_sensor_horizon, 
+	occluded, 
+	free
+}; 
+
 struct NanoMapKnnReply {
-  uint8_t               fov_status;
+  NanoMapFovStatus      fov_status;
   uint32_t              frame_id;
   Vector3               query_point_in_frame_id;
   std::vector<Vector3>  closest_points_in_frame_id;
 };
+
+
 
 struct NanoMapTime {
   uint32_t sec;
