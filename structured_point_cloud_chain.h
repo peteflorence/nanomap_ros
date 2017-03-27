@@ -14,6 +14,8 @@ class StructuredPointCloudChain {
   public:
 
   	NanoMapTime GetMostRecentCloudTime();
+  	void DeleteMemoryBeforeTime(NanoMapTime delete_time);
+
   	void UpdateEdge(uint32_t index, Matrix4f relative_transform);
   	void AddNextEdgeVertex(Matrix4f new_edge, StructuredPointCloud new_cloud);
 
