@@ -18,6 +18,7 @@ class NanoMap {
   NanoMapKnnReply KnnQuery(NanoMapKnnArgs);
 
  private:
+  void UpdateChainWithLatestPose();
   void TryAddingPointCloudBufferToChain();
 
   PoseManager pose_manager;
