@@ -14,7 +14,7 @@ class NanoMap {
   void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
   void SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info);
 
-  NanoMapKnnReply KnnQuery(NanoMapKnnArgs const& args) const;
+  NanoMapKnnReply const& KnnQuery(NanoMapKnnArgs const& args) const;
 
  private:
   void UpdateChainWithLatestPose();

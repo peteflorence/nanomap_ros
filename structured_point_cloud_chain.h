@@ -19,7 +19,6 @@ class StructuredPointCloudChain {
   	void UpdateEdge(uint32_t index, Matrix4f const& relative_transform);
   	void AddNextEdgeVertex(Matrix4f const& new_edge, StructuredPointCloudPtr const& new_cloud);
 
-
   private:
 	std::deque<EdgeVertex> chain;
 };
