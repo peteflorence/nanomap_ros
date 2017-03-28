@@ -10,7 +10,7 @@ Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
 }
 
 NanoMapTime StructuredPointCloudChain::GetMostRecentCloudTime() const {
-	return chain.at(0).vertex->GetTime();
+  return chain.at(0).vertex->GetTime();
 }
 
 void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
@@ -23,6 +23,10 @@ void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete
 			break;
 		}
 	}
+}
+
+size_t StructuredPointCloudChain::GetChainSize() const {
+  return chain.size();
 }
 
 void StructuredPointCloudChain::UpdateEdge(uint32_t index, Matrix4 const& relative_transform) {

@@ -17,6 +17,7 @@ class StructuredPointCloudChain {
   	NanoMapTime GetMostRecentCloudTime() const;
   	void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
 
+    size_t GetChainSize() const;
   	void UpdateEdge(uint32_t index, Matrix4 const& relative_transform);
   	void AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud);
 

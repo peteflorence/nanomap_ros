@@ -42,14 +42,18 @@ void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
 }
 
 void NanoMap::UpdateChainWithLatestPose() {
-  NanoMapTime previous_cloud_time = structured_point_cloud_chain.GetMostRecentCloudTime();
-  NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
-  Matrix4 updated_transform = pose_manager.GetRelativeTransformFromTo(last_pose_time, previous_cloud_time);
-  structured_point_cloud_chain.UpdateEdge(0, updated_transform);
+  if (structured_point_cloud_chain.GetChainSize() > 0) {
+    std::cout << "Or here" << std::endl;
+    NanoMapTime previous_cloud_time = structured_point_cloud_chain.GetMostRecentCloudTime();
+    NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
+    Matrix4 updated_transform = pose_manager.GetRelativeTransformFromTo(last_pose_time, previous_cloud_time);
+    structured_point_cloud_chain.UpdateEdge(0, updated_transform);
+  }
 }
 
 void NanoMap::TryAddingPointCloudBufferToChain() {
   while (point_cloud_buffer.size() > 0) {
+    std::cout << "Shouldnt be in here" << std::endl;
 
     StructuredPointCloudPtr new_cloud_ptr = point_cloud_buffer.at(0);
     NanoMapTime new_cloud_time = new_cloud_ptr->GetTime();
