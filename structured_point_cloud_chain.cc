@@ -57,7 +57,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   uint32_t first_frame_id;
 
   // search through chain
-  for (auto i = chain.begin(); i != chain.end(); ++i) { 
+  for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
 
   	// transform to previous body frame
   	search_position = i->ApplyEdgeTransform(search_position);
@@ -67,9 +67,12 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   	// check fov
   	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf);
-  	if (i == chain.begin()) {
+    // switch to this
+    // NanoMapFovStatus fov_status = i->EvaluateFov(search_position_rdf);
+  	if (i == chain.cbegin()) {
   		first_fov_status = fov_status;
   		first_frame_id = i->vertex->frame_id;
+      // first_frame_id = i->GetFrameId();
   	}
 
   	// if free, do NN and break
@@ -89,10 +92,11 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
      	reply.fov_status = fov_status;
      	reply.frame_id = i->vertex->frame_id;
+      //reply.frame_id = i->GetVertex()->GetFrameId();
      	reply.query_point_in_frame_id = search_position;
      	reply.closest_points_in_frame_id = return_points;
      	break;
- 	}
+ 	  }
 
   }
 
