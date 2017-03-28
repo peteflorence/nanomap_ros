@@ -82,7 +82,9 @@ NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before,
 }
 
 Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to) {
-
+	NanoMapPose pose_from = GetPoseAtTime(time_from);
+	NanoMapPose pose_to   = GetPoseAtTime(time_to);
+	return FindTransform(pose_from, pose_to);
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose) {
