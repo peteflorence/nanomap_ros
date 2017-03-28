@@ -7,7 +7,7 @@
 #include <algorithm>
 
 template <typename T>
-struct PointCloud
+struct PointCloudTwo
 {
 
 	std::vector<pcl::PointXYZ>  pts;
@@ -49,8 +49,8 @@ public:
 	std::vector<num_t> squared_distances;
 
 	typedef nanoflann::KDTreeSingleIndexAdaptor<
-	nanoflann::L2_Simple_Adaptor<num_t, PointCloud<num_t> > ,
-	PointCloud<num_t>,
+	nanoflann::L2_Simple_Adaptor<num_t, PointCloudTwo<num_t> > ,
+	PointCloudTwo<num_t>,
 	3 /* dim */
 	> my_kd_tree_t;
 
@@ -111,6 +111,6 @@ void SearchForNearest(num_t x, num_t y, num_t z) {
 }
 
 private:
-	PointCloud<num_t> cloud;
+	PointCloudTwo<num_t> cloud;
 	my_kd_tree_t index;
 };

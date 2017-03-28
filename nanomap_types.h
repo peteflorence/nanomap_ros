@@ -38,11 +38,22 @@ struct NanoMapKnnReply {
 };
 
 struct NanoMapTime {
+  NanoMapTime(){};
+  NanoMapTime(uint32_t set_sec, uint32_t set_nsec) {
+    sec = set_sec;
+    nsec = set_nsec;
+  };
   uint32_t sec;
   uint32_t nsec;
 };
 
 struct NanoMapPose {
+  NanoMapPose(){};
+  NanoMapPose(Vector3 set_position, Quat set_quaternion, NanoMapTime set_time) {
+    position = set_position;
+    quaternion = set_quaternion;
+    time = set_time;
+  }
   Vector3     position;
   Quat        quaternion;
   NanoMapTime time;
