@@ -20,7 +20,7 @@ class StructuredPointCloudChain {
   	void UpdateEdge(uint32_t index, Matrix4 const& relative_transform);
   	void AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud);
 
-  	NanoMapKnnReply const KnnQuery(NanoMapKnnArgs const& args) const;
+  	NanoMapKnnReply KnnQuery(NanoMapKnnArgs const& args) const;
 
   private:
 	std::deque<EdgeVertex> chain;

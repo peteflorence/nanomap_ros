@@ -64,7 +64,7 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
   }
 }
 
-NanoMapKnnReply const NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
+NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
   return structured_point_cloud_chain.KnnQuery(args);
 }
 

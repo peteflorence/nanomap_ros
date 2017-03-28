@@ -36,7 +36,7 @@ void StructuredPointCloudChain::AddNextEdgeVertex(Matrix4 const& new_edge, Struc
 	chain.push_front(new_edge_vertex);
 }
 
-NanoMapKnnReply const StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) const {
+NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) const {
   NanoMapKnnReply reply;
 
   if  (chain.size() == 0) {
