@@ -8,6 +8,7 @@
 
 class NanoMap {
  public:
+  NanoMap();
 
   void AddPose(NanoMapPose const& pose);
   void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time);
@@ -28,6 +29,9 @@ class NanoMap {
 
   std::deque<StructuredPointCloudPtr> point_cloud_buffer;
   StructuredPointCloudChain structured_point_cloud_chain;
+
+  bool received_camera_info;
+  bool received_sensor_transform;
 
 };
 

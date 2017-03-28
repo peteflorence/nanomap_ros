@@ -1,5 +1,9 @@
 #include "nanomap.h"
 
+NanoMap::NanoMap() {
+  fov_evaluator_ptr = std::make_shared<FovEvaluator>();
+}
+
 void NanoMap::AddPose(NanoMapPose const& pose) {
   pose_manager.AddPose(pose);
 
@@ -25,7 +29,6 @@ void NanoMap::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 }
 
 void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
-  fov_evaluator_ptr = std::make_shared<FovEvaluator>();
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
 }
 
