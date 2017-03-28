@@ -60,3 +60,7 @@ void FovEvaluator::SetCameraInfo(double bin, double width, double height, Matrix
   K(2,2) = 1.0;
   return;
 }
+
+void FovEvaluator::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
+    R_body_to_rdf_ = R_body_to_rdf;
+}

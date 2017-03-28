@@ -11,8 +11,11 @@ class NanoMap {
 
   void AddPose(NanoMapPose const& pose);
   void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time);
+  
   void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
+
   void SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info);
+  void SetBodyToRdf(Matrix3 const& R_body_to_rdf);
 
   NanoMapKnnReply const& KnnQuery(NanoMapKnnArgs const& args) const;
 

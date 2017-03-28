@@ -31,6 +31,10 @@ void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 con
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
 }
 
+void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
+  fov_evaluator_ptr->SetBodyToRdf(R_body_to_rdf);
+}
+
 void NanoMap::UpdateChainWithLatestPose() {
   NanoMapTime previous_cloud_time = structured_point_cloud_chain.GetMostRecentCloudTime();
   NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
