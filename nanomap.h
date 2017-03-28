@@ -17,7 +17,7 @@ class NanoMap {
   void SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info);
   void SetBodyToRdf(Matrix3 const& R_body_to_rdf);
 
-  NanoMapKnnReply const& KnnQuery(NanoMapKnnArgs const& args) const;
+  NanoMapKnnReply const KnnQuery(NanoMapKnnArgs const& args) const;
 
  private:
   void UpdateChainWithLatestPose();

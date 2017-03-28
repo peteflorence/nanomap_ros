@@ -66,14 +66,8 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
   }
 }
 
-NanoMapKnnReply const& NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
-  // transform from frame in args to 
-
-  NanoMapKnnReply reply;
-  reply.fov_status;
-  reply.frame_id;
-  reply.query_point_in_frame_id;
-  reply.closest_points_in_frame_id;
+NanoMapKnnReply const NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
+  return structured_point_cloud_chain.KnnQuery(args);
 }
 
 

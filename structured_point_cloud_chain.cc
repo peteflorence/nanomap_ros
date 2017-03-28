@@ -11,3 +11,7 @@ void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete
 		}
 	}
 }
+
+NanoMapKnnReply const StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) const {
+  return NanoMapKnnReply();
+}
