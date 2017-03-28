@@ -1,7 +1,5 @@
 #include "nanomap.h"
 
-#define num_nearest_neighbors 1
-
 void NanoMap::AddPose(NanoMapPose const& pose) {
   pose_manager.AddPose(pose);
 

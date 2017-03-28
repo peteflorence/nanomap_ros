@@ -10,6 +10,8 @@ class StructuredPointCloud {
  public:
   FovEvaluatorPtr fov_evaluator_;
   PointCloudPtr cloud_ptr_;
+  KDTreeTwo<double> kd_tree_;
+  uint32_t frame_id;
 
   StructuredPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, FovEvaluatorPtr const& fov_evaluator) {
   	cloud_ptr_ = cloud_ptr;
@@ -27,7 +29,6 @@ class StructuredPointCloud {
 
 
  private:
- 	KDTreeTwo<double> kd_tree_;
  	NanoMapTime cloud_time_;
 };
 

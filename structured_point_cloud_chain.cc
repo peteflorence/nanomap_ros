@@ -1,5 +1,7 @@
 #include "structured_point_cloud_chain.h"
 
+#define num_nearest_neighbors 1
+
 Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
   Vector4 p_aug;
   p_aug << p, 1.0;
@@ -22,7 +24,6 @@ void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete
 NanoMapKnnReply const StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) const {
   NanoMapKnnReply reply;
 
-  // if chain is empty, return
   if  (chain.size() == 0) {
   	reply.fov_status = NanoMapFovStatus::empty_memory;
   	return reply;
@@ -30,6 +31,8 @@ NanoMapKnnReply const StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& 
 
   Vector3 search_position = args.query_point_current_body_frame;
   Vector3 search_position_rdf = Vector3(0,0,0);
+  NanoMapFovStatus first_fov_status;
+  uint32_t first_frame_id;
 
   // search through chain
   for (auto i = chain.begin(); i != chain.end(); ++i) { 
@@ -42,14 +45,38 @@ NanoMapKnnReply const StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& 
 
   	// check fov
   	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf);
+  	if (i == chain.begin()) {
+  		first_fov_status = fov_status;
+  		first_frame_id = i->vertex->frame_id;
+  	}
 
-  	// potentially do NN
+  	// if free, do NN and break
+  	if (fov_status == NanoMapFovStatus::free_space) {
+
+  		i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
+
+  		std::vector<pcl::PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
+  		std::vector<Vector3> return_points;
+  		if (closest_pts.size() > 0) {
+    		for (size_t i = 0; i < std::min((int)closest_pts.size(), num_nearest_neighbors); i++) {
+  				pcl::PointXYZ next_point = closest_pts[i];
+     			Vector3 depth_position = Vector3(next_point.x, next_point.y, next_point.z);
+     			return_points.push_back(depth_position);
+     		}
+     	}
+
+     	reply.fov_status = fov_status;
+     	reply.frame_id = i->vertex->frame_id;
+     	reply.query_point_in_frame_id = search_position;
+     	reply.closest_points_in_frame_id = return_points;
+     	break;
+ 	}
 
   }
 
-  reply.fov_status;
-  reply.frame_id;
-  reply.query_point_in_frame_id;
-  reply.closest_points_in_frame_id;
+  reply.fov_status = first_fov_status;
+  reply.frame_id = first_frame_id;
+  reply.query_point_in_frame_id = args.query_point_current_body_frame;
+  reply.closest_points_in_frame_id = std::vector<Vector3>();
   return reply;
 }
