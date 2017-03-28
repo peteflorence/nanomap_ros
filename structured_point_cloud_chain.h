@@ -6,7 +6,9 @@
 
 
 struct EdgeVertex {
-	Matrix4f			 	edge;
+  	Vector3 ApplyEdgeTransform(Vector3 p);
+	
+	Matrix4				 	edge;
 	StructuredPointCloudPtr vertex;
 };
 
@@ -16,8 +18,8 @@ class StructuredPointCloudChain {
   	NanoMapTime GetMostRecentCloudTime() const;
   	void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
 
-  	void UpdateEdge(uint32_t index, Matrix4f const& relative_transform);
-  	void AddNextEdgeVertex(Matrix4f const& new_edge, StructuredPointCloudPtr const& new_cloud);
+  	void UpdateEdge(uint32_t index, Matrix4 const& relative_transform);
+  	void AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud);
 
   	NanoMapKnnReply const KnnQuery(NanoMapKnnArgs const& args) const;
 

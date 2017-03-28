@@ -13,7 +13,7 @@ class PoseManager {
   bool CanInterpolatePoseAtTime(NanoMapTime const& query_time) const;
   bool CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, NanoMapTime const& time_to) const;
   NanoMapPose GetPoseAtTime(NanoMapTime const& query_time);
-  Matrix4f GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
+  Matrix4 GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
 
  private:
   std::deque<NanoMapPose> poses;

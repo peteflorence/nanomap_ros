@@ -10,16 +10,17 @@
 
 typedef double Scalar;
 typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
+typedef Eigen::Matrix<Scalar, 4, 1> Vector4;
 typedef Eigen::Matrix<Scalar, 3, 3> Matrix3;
 typedef Eigen::Matrix<Scalar, 4, 4> Matrix4;
-typedef Eigen::Matrix<float, 4, 4>  Matrix4f;
 typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudPtr;
 
 struct NanoMapKnnArgs {
-  Vector3               query_point_body_frame;
+  Vector3               query_point_current_body_frame;
 };
 
 enum class NanoMapFovStatus { 
+	empty_memory,
 	behind,
 	laterally_outside_fov, 
 	beyond_sensor_horizon, 
@@ -40,7 +41,7 @@ struct NanoMapTime {
 };
 
 struct NanoMapPose {
-  Matrix4f pose;
+  Matrix4 pose;
   NanoMapTime time;
 };
 
