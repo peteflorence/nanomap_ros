@@ -29,11 +29,18 @@ void StructuredPointCloudChain::UpdateEdge(uint32_t index, Matrix4 const& relati
 	chain.at(index).edge = relative_transform;
 }
 
+void StructuredPointCloudChain::ManageChainSize() {
+  while (chain.size() > N_max_point_clouds) {
+    chain.pop_back();
+  }
+}
+
 void StructuredPointCloudChain::AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud) {
 	EdgeVertex new_edge_vertex;
 	new_edge_vertex.edge = new_edge;
 	new_edge_vertex.vertex = new_cloud;
 	chain.push_front(new_edge_vertex);
+  ManageChainSize();
 }
 
 NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) const {

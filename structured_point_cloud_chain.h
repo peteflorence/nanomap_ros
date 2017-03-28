@@ -23,7 +23,10 @@ class StructuredPointCloudChain {
   	NanoMapKnnReply KnnQuery(NanoMapKnnArgs const& args) const;
 
   private:
+    void ManageChainSize();
+
 	std::deque<EdgeVertex> chain;
+  uint32_t N_max_point_clouds = 1;
 };
 
 #endif
