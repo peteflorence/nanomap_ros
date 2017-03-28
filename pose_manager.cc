@@ -80,3 +80,27 @@ NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before,
 	pose.quaternion = interpolated_quat;
 	return pose;
 }
+
+Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to) {
+
+}
+
+Matrix4 PoseManager::FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose) {
+	return FindTransform(previous_pose)*InvertTransform(FindTransform(new_pose));
+}
+
+Matrix4 PoseManager::FindTransform(NanoMapPose const& pose) {
+  Matrix4 transform = Eigen::Matrix4d::Identity();
+  transform.block<3,3>(0,0) = pose.quaternion.toRotationMatrix();
+  transform.block<3,1>(0,3) = pose.position;
+  return transform;
+}
+
+Matrix4 PoseManager::InvertTransform(Matrix4 const& transform) {
+  Matrix3 R = transform.block<3,3>(0,0);
+  Vector3 t = transform.block<3,1>(0,3);
+  Matrix4 inverted_transform = Eigen::Matrix4d::Identity();
+  inverted_transform.block<3,3>(0,0) = R.transpose();
+  inverted_transform.block<3,1>(0,3) = -1.0 * R.transpose() * t;
+  return inverted_transform;
+}

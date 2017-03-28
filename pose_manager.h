@@ -16,7 +16,11 @@ class PoseManager {
   Matrix4 GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
 
  private:
-   NanoMapPose InterpolateBetweenPoses(NanoMapPose const& pose_before, NanoMapPose const& pose_after, double t_parameter);
+  NanoMapPose InterpolateBetweenPoses(NanoMapPose const& pose_before, NanoMapPose const& pose_after, double t_parameter);
+  Matrix4 FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose);
+  Matrix4 FindTransform(NanoMapPose const& pose);
+  Matrix4 InvertTransform(Matrix4 const& transform);
+
   std::deque<NanoMapPose> poses;
 
 };
