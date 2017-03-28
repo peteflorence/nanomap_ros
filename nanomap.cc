@@ -1,6 +1,9 @@
 #include "nanomap.h"
 
-NanoMap::NanoMap() {
+NanoMap::NanoMap() : 
+received_camera_info(false),
+received_sensor_transform(false)
+{
   fov_evaluator_ptr = std::make_shared<FovEvaluator>();
 }
 
@@ -30,10 +33,12 @@ void NanoMap::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 
 void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
+  received_camera_info = true;
 }
 
 void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
   fov_evaluator_ptr->SetBodyToRdf(R_body_to_rdf);
+  received_sensor_transform = true;
 }
 
 void NanoMap::UpdateChainWithLatestPose() {
@@ -68,7 +73,15 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
 }
 
 NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
-  return structured_point_cloud_chain.KnnQuery(args);
+  if (received_camera_info && received_sensor_transform) {
+    return structured_point_cloud_chain.KnnQuery(args);    
+  }
+  else {
+    NanoMapKnnReply reply;
+    reply.fov_status = NanoMapFovStatus::not_initialized;
+    return reply;
+  }
+
 }
 
 

@@ -20,6 +20,7 @@ struct NanoMapKnnArgs {
 };
 
 enum class NanoMapFovStatus { 
+  not_initialized,
 	empty_memory,
 	behind,
 	laterally_outside_fov, 
