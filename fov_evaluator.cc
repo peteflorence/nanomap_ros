@@ -1,5 +1,9 @@
 #include "fov_evaluator.h"
 
+Vector3 FovEvaluator::RotateToSensorFrame(Vector3 position_body_frame) {
+    return R_body_to_rdf_*position_body_frame;
+}
+
 bool FovEvaluator::IsBehind(Vector3 position) const {
   return (position(2) < -0.5);
 }
