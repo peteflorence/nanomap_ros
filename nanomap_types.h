@@ -16,6 +16,8 @@ typedef Eigen::Matrix<Scalar, 4, 4> Matrix4;
 typedef Eigen::Quaterniond Quat;
 typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudPtr;
 
+#define NANOMAP_DEBUG_PRINT false
+
 struct NanoMapKnnArgs {
   Vector3               query_point_current_body_frame;
 };

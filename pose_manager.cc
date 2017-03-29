@@ -32,17 +32,17 @@ bool PoseManager::CanInterpolatePoseAtTime(NanoMapTime const& query_time) const 
 	NanoMapTime oldest_time = poses.back().time;
 	NanoMapTime newest_time = poses.front().time;
 
-	std::cout << "query time " << query_time.sec << "." << query_time.nsec << std::endl;
-	std::cout << "oldest_time " << oldest_time.sec << "." << oldest_time.nsec << std::endl;
-	std::cout << "newest_time " << newest_time.sec << "." << newest_time.nsec << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "query time " << query_time.sec << "." << query_time.nsec << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "oldest_time " << oldest_time.sec << "." << oldest_time.nsec << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "newest_time " << newest_time.sec << "." << newest_time.nsec << std::endl;}
 
 
 	if ( (query_time.sec <= oldest_time.sec) && (query_time.nsec < oldest_time.nsec) ) {
-		std::cout << "returning false 1 in can interpolate" << std::endl;
+		if (NANOMAP_DEBUG_PRINT){std::cout << "returning false 1 in can interpolate" << std::endl;}
 		return false;
 	}
 	if ( (query_time.sec >= newest_time.sec) && (query_time.nsec > newest_time.nsec) ) {
-		std::cout << "returning false 2 in can interpolate" << std::endl;
+		if (NANOMAP_DEBUG_PRINT){std::cout << "returning false 2 in can interpolate" << std::endl;}
 		return false;
 	}
 
@@ -54,19 +54,19 @@ bool PoseManager::CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, N
 }
 
 NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
-	std::cout << "Inside GetPoseAtTime" << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside GetPoseAtTime" << std::endl;}
 
 	// iterate through pose times and find bookends
 	size_t oldest_pose_index = poses.size()-1;
 
-	std::cout << "oldest_pose_index " << oldest_pose_index << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "oldest_pose_index " << oldest_pose_index << std::endl;}
 
     NanoMapPose pose_before = poses[oldest_pose_index];
     NanoMapPose pose_after;
 
-    std::cout << "starting search" << std::endl;
+    if (NANOMAP_DEBUG_PRINT){std::cout << "starting search" << std::endl;}
     for (int i = oldest_pose_index - 1; i >= 0; i--) {
-      std::cout << "i is " << i << std::endl;
+      if (NANOMAP_DEBUG_PRINT){std::cout << "i is " << i << std::endl;}
       pose_after = poses[i];
       if ((pose_after.time.sec > query_time.sec) && (pose_after.time.nsec > query_time.nsec)) {
         break;
@@ -74,7 +74,7 @@ NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
       pose_before = pose_after;
     }
 
-    std::cout << "found bookends " << std::endl;
+    if (NANOMAP_DEBUG_PRINT){std::cout << "found bookends " << std::endl;}
 
     // find pose interpolation parameter
     double t_1  = (query_time.sec  - pose_before.time.sec) * 1.0 + (query_time.nsec - pose_before.time.nsec)/ 1.0e9;
@@ -87,8 +87,8 @@ NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
 }
 
 NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before, NanoMapPose const& pose_after, double t_parameter) {
-	std::cout << "Inside InterpolateBetweenPoses" << std::endl;
-	std::cout << "t_parameter " << t_parameter << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside InterpolateBetweenPoses" << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "t_parameter " << t_parameter << std::endl;}
 
 	// position interpolation
 	Vector3 interpolated_vector = pose_before.position + (pose_after.position - pose_before.position)*t_parameter;
@@ -104,9 +104,9 @@ NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before,
 }
 
 Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to) {
-	std::cout << "Inside GetRelativeTransformFromTo" << std::endl;
-	std::cout << "time_from" << time_from.sec << "." << time_from.nsec << std::endl;
-	std::cout << "time_to" << time_to.sec << "." << time_to.nsec << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside GetRelativeTransformFromTo" << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "time_from" << time_from.sec << "." << time_from.nsec << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "time_to" << time_to.sec << "." << time_to.nsec << std::endl;}
 	NanoMapPose pose_from = GetPoseAtTime(time_from);
 	NanoMapPose pose_to   = GetPoseAtTime(time_to);
 	return FindTransform(pose_from, pose_to);
