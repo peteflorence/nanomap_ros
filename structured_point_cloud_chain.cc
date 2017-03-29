@@ -71,7 +71,9 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   Vector3 first_search_position_rdf;
 
   // search through chain
+  size_t num_history;
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
+    num_history++;
 
   	// transform to previous body frame
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
@@ -99,6 +101,8 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   	// if free, do NN and return
   	if (fov_status == NanoMapFovStatus::free_space) {
+
+      //std::cout << "num_history " << num_history << std::endl;
 
   		i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
 
