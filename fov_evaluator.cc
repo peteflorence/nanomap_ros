@@ -61,10 +61,10 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
     }
     // Checks if above top/bottom FOV
     if (std::min(pi_y_right_up_aabb, pi_y) < 0) {
-      return NanoMapFovStatus::laterally_outside_fov; 
+      return NanoMapFovStatus::free_space; 
     }
     if (std::max(pi_y_left_down_aabb, pi_y) > (num_y_pixels - 1)) {
-      return NanoMapFovStatus::laterally_outside_fov; 
+      return NanoMapFovStatus::free_space; 
     }
 
     //Checks for occlusion
