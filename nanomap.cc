@@ -108,9 +108,11 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
 }
 
 void NanoMap::TrimPoseMemory() {
-  NanoMapTime oldest_cloud_time = structured_point_cloud_chain.GetOldestCloudTime();
-  NanoMapTime time_of_pose_before = pose_manager.GetTimeOfPoseBefore(oldest_cloud_time);
-  pose_manager.DeleteMemoryBeforeTime(time_of_pose_before);
+  if (structured_point_cloud_chain.GetChainSize() > 0) {
+    NanoMapTime oldest_cloud_time = structured_point_cloud_chain.GetOldestCloudTime();
+    NanoMapTime time_of_pose_before = pose_manager.GetTimeOfPoseBefore(oldest_cloud_time);
+    pose_manager.DeleteMemoryBeforeTime(time_of_pose_before);
+  }
 }
 
 NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
@@ -132,9 +134,13 @@ void NanoMap::NanoMapDebugPrintState() {
   std::cout << std::endl;
   std::cout << "point_cloud_buffer.size() " << point_cloud_buffer.size() << std::endl;
   std::cout << "poses.size()"               << pose_manager.GetNumPoses() << std::endl;
-  std::cout << "chain.size()"               << structured_point_cloud_chain.GetChainSize() << std::endl;     
-  std::cout << "time of last point cloud  " << structured_point_cloud_chain.GetMostRecentCloudTime().sec << "." << structured_point_cloud_chain.GetMostRecentCloudTime().nsec << std::endl;
-  std::cout << "time of last pose         " << pose_manager.GetMostRecentPoseTime().sec << "." << pose_manager.GetMostRecentPoseTime().nsec << std::endl;            
+  std::cout << "chain.size()"               << structured_point_cloud_chain.GetChainSize() << std::endl;
+  if (structured_point_cloud_chain.GetChainSize()>0) {
+    std::cout << "time of last point cloud  " << structured_point_cloud_chain.GetMostRecentCloudTime().sec << "." << structured_point_cloud_chain.GetMostRecentCloudTime().nsec << std::endl;
+  }
+  if (pose_manager.GetNumPoses() > 0) {
+    std::cout << "time of last pose         " << pose_manager.GetMostRecentPoseTime().sec << "." << pose_manager.GetMostRecentPoseTime().nsec << std::endl;            
+  }    
   std::cout << std::endl;
   }
 }
