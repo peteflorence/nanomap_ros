@@ -50,20 +50,20 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
     int pi_y_right_up_aabb = projected_right_up_aabb(1)/projected_right_up_aabb(2);
 
     // Checks if outside left/right FOV
-    std::cout << std::endl;
-    std::cout << "aabb " << aabb.transpose() << std::endl;
-    std::cout << pi_x << " " << pi_x_left_down_aabb << " " << pi_x_right_up_aabb << std::endl;
-    std::cout << pi_y << " " << pi_y_left_down_aabb << " " << pi_y_right_up_aabb << std::endl;
-    std::cout << std::endl;
+    // std::cout << std::endl;
+    // std::cout << "aabb " << aabb.transpose() << std::endl;
+    // std::cout << pi_x << " " << pi_x_left_down_aabb << " " << pi_x_right_up_aabb << std::endl;
+    // std::cout << pi_y << " " << pi_y_left_down_aabb << " " << pi_y_right_up_aabb << std::endl;
+    // std::cout << std::endl;
 
-    if ( (pi_x_left_down_aabb < 0) || (pi_x_right_up_aabb > (num_x_pixels - 1)) ) {
+    if ( (std::min(pi_x_left_down_aabb,pi_x) < 0) || (std::max(pi_x_right_up_aabb,pi_x) > (num_x_pixels - 1)) ) {
       return NanoMapFovStatus::laterally_outside_fov;
     }
     // Checks if above top/bottom FOV
-    if (pi_y_right_up_aabb < 0) {
+    if (std::min(pi_y_right_up_aabb, pi_y) < 0) {
       return NanoMapFovStatus::laterally_outside_fov; 
     }
-    if (pi_y_left_down_aabb > (num_y_pixels - 1)) {
+    if (std::max(pi_y_left_down_aabb, pi_y) > (num_y_pixels - 1)) {
       return NanoMapFovStatus::laterally_outside_fov; 
     }
 
