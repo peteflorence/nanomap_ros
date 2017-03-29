@@ -61,8 +61,13 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   Vector3 search_position = args.query_point_current_body_frame;
   Vector3 search_position_rdf = Vector3(0,0,0);
+
+  Vector3 sigma = args.axis_aligned_linear_covariance;
+  Vector3 sigma_rdf = Vector3(0,0,0);
+
   NanoMapFovStatus first_fov_status;
   uint32_t first_frame_id;
+  Vector3 first_sigma_rdf;
 
   // search through chain
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
@@ -70,10 +75,13 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	// transform to previous body frame
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
+    sigma           = i->ApplyEdgeTransform(sigma);
+    sigma           = sigma + Vector3(0.01, 0.01, 0.01);
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
   	// transform into sensor rdf frame
   	search_position_rdf = i->vertex->fov_evaluator_->RotateToSensorFrame(search_position);
+    sigma_rdf           = i->vertex->fov_evaluator_->RotateToSensorFrame(search_position);
     if(0){std::cout << "search_position_rdf " << search_position_rdf.transpose() << std::endl;}
 
   	// check fov
@@ -83,6 +91,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	if (i == chain.cbegin()) {
   		first_fov_status = fov_status;
   		first_frame_id = i->vertex->frame_id_;
+      first_sigma_rdf = sigma_rdf;
       // first_frame_id = i->GetFrameId();
   	}
 
@@ -109,6 +118,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
       //reply.frame_id = i->GetVertex()->GetFrameId();
      	reply.query_point_in_frame_id = search_position;
      	reply.closest_points_in_frame_id = return_points;
+      reply.axis_aligned_linear_covariance = sigma_rdf;
      	return reply;
  	  }
 
@@ -118,5 +128,6 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   reply.frame_id = first_frame_id;
   reply.query_point_in_frame_id = args.query_point_current_body_frame;
   reply.closest_points_in_frame_id = std::vector<Vector3>();
+  reply.axis_aligned_linear_covariance = first_sigma_rdf;
   return reply;
 }

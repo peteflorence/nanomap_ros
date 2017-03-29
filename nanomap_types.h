@@ -20,6 +20,7 @@ typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudPtr;
 
 struct NanoMapKnnArgs {
   Vector3               query_point_current_body_frame;
+  Vector3               axis_aligned_linear_covariance;
 };
 
 enum class NanoMapFovStatus { 
@@ -52,6 +53,7 @@ struct NanoMapKnnReply {
   uint32_t              frame_id;
   Vector3               query_point_in_frame_id;
   std::vector<Vector3>  closest_points_in_frame_id;
+  Vector3               axis_aligned_linear_covariance;
 };
 
 struct NanoMapTime {
