@@ -77,7 +77,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
     sigma           = i->ApplyEdgeTransform(sigma);
-    sigma           = sigma + Vector3(0.01, 0.01, 0.01);
+    //sigma           = sigma + Vector3(0.01, 0.01, 0.01);
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
   	// transform into sensor rdf frame
@@ -106,9 +106,9 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
       if(0){std::cout << "closest_pts.size() in nanomap kd_tree" << closest_pts.size() << std::endl;}
   		std::vector<Vector3> return_points;
   		if (closest_pts.size() > 0) {
-    		for (size_t i = 0; i < std::min((int)closest_pts.size(), num_nearest_neighbors); i++) {
+    		for (size_t j = 0; j < std::min((int)closest_pts.size(), num_nearest_neighbors); j++) {
           if(0){std::cout << "ADDING" << std::endl;}
-  				pcl::PointXYZ next_point = closest_pts[i];
+  				pcl::PointXYZ next_point = closest_pts[j];
      			Vector3 depth_position = Vector3(next_point.x, next_point.y, next_point.z);
      			return_points.push_back(depth_position);
           if(0){std::cout << "return_points now this big " << return_points.size() << std::endl;}
@@ -126,10 +126,25 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   }
 
+  chain.at(0).vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(first_search_position_rdf[0], first_search_position_rdf[1], first_search_position_rdf[2]);
+
+  std::vector<pcl::PointXYZ> closest_pts = chain.at(0).vertex->kd_tree_.closest_pts;
+  if(0){std::cout << "closest_pts.size() in nanomap kd_tree" << closest_pts.size() << std::endl;}
+  std::vector<Vector3> return_points;
+  if (closest_pts.size() > 0) {
+    for (size_t j = 0; j < std::min((int)closest_pts.size(), num_nearest_neighbors); j++) {
+      if(0){std::cout << "ADDING" << std::endl;}
+      pcl::PointXYZ next_point = closest_pts[j];
+      Vector3 depth_position = Vector3(next_point.x, next_point.y, next_point.z);
+      return_points.push_back(depth_position);
+      if(0){std::cout << "return_points now this big " << return_points.size() << std::endl;}
+    }
+  }
+
   reply.fov_status = first_fov_status;
   reply.frame_id = first_frame_id;
   reply.query_point_in_frame_id = first_search_position_rdf;
-  reply.closest_points_in_frame_id = std::vector<Vector3>();
+  reply.closest_points_in_frame_id = return_points;
   reply.axis_aligned_linear_covariance = first_sigma_rdf;
   return reply;
 }
