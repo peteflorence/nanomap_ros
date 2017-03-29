@@ -17,15 +17,17 @@ bool FovEvaluator::IsOutsideDeadBand(Vector3 position) const {
   return (position.squaredNorm() > 0.5);
 }
 
-NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr, Vector3 position) const {
+NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr, Vector3 position, bool ignore_horizon) const {
     if (IsBehind(position)) {
       return NanoMapFovStatus::behind;
     }
     if (!IsOutsideDeadBand(position)) {
       return NanoMapFovStatus::free_space;
     }
-    if (IsBeyondSensorHorizon(position)) {
-      return NanoMapFovStatus::beyond_sensor_horizon;
+    if (!ignore_horizon) {
+      if (IsBeyondSensorHorizon(position)) {
+        return NanoMapFovStatus::beyond_sensor_horizon;
+      }
     }
 
     Vector3 projected = K * position;
