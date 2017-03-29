@@ -39,6 +39,7 @@ void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& c
   // try adding point clouds off buffer to chain 
   TryAddingPointCloudBufferToChain();
   NanoMapDebugPrintState();
+  TrimPoseMemory();
   if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPointCloud" << std::endl;}
 }
 
@@ -102,6 +103,12 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
   }
 }
 
+void NanoMap::TrimPoseMemory() {
+  NanoMapTime oldest_cloud_time = structured_point_cloud_chain.GetOldestCloudTime();
+  NanoMapTime time_of_pose_before = pose_manager.GetTimeOfPoseBefore(oldest_cloud_time);
+  pose_manager.DeleteMemoryBeforeTime(time_of_pose_before);
+}
+
 NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
   //std::cout << "Entering KnnQuery" << std::endl;
   if (received_camera_info && received_sensor_transform) {
@@ -117,7 +124,7 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (NANOMAP_DEBUG_PRINT){
+  if (1){
   std::cout << std::endl;
   std::cout << "point_cloud_buffer.size() " << point_cloud_buffer.size() << std::endl;
   std::cout << "poses.size()"               << pose_manager.GetNumPoses() << std::endl;

@@ -13,6 +13,7 @@ class PoseManager {
   NanoMapTime GetOldestPoseTime() const;
   bool CanInterpolatePoseAtTime(NanoMapTime const& query_time) const;
   bool CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, NanoMapTime const& time_to) const;
+  NanoMapTime GetTimeOfPoseBefore(NanoMapTime const& time) const;
   NanoMapPose GetPoseAtTime(NanoMapTime const& query_time);
   Matrix4 GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
 

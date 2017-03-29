@@ -5,9 +5,13 @@ void PoseManager::AddPose(NanoMapPose const& pose) {
 }
 
 void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
+	std::cout << "deleting poses" << std::endl;
 	while (poses.size() >= 0) {
+		std::cout << "deleting another pose" << std::endl;
+		std::cout << "delete time      " << delete_time.sec << "." << delete_time.nsec << std::endl;
 		NanoMapPose i = poses.back(); 
-		if ( (i.time.sec <= delete_time.sec) && (i.time.nsec < delete_time.nsec) ) {
+		std::cout << "oldest_pose_time " << i.time.sec << "." << i.time.nsec << std::endl;
+		if ((delete_time.sec > i.time.sec) || ( (delete_time.sec >= i.time.sec) && (delete_time.nsec > i.time.nsec) )) {
 			poses.pop_back();
 		}
 		else {
@@ -84,6 +88,31 @@ NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
 
 	// interpolate
 	return InterpolateBetweenPoses(pose_before, pose_after, t_parameter);
+}
+
+NanoMapTime PoseManager::GetTimeOfPoseBefore(NanoMapTime const& query_time) const {
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside GetTimeOfPoseBefore" << std::endl;}
+
+	// iterate through pose times and find bookends
+	size_t oldest_pose_index = poses.size()-1;
+
+	if (NANOMAP_DEBUG_PRINT){std::cout << "oldest_pose_index " << oldest_pose_index << std::endl;}
+
+    NanoMapPose pose_before = poses[oldest_pose_index];
+    NanoMapPose pose_after;
+
+    if (NANOMAP_DEBUG_PRINT){std::cout << "starting search" << std::endl;}
+    for (int i = oldest_pose_index - 1; i >= 0; i--) {
+      if (NANOMAP_DEBUG_PRINT){std::cout << "i is " << i << std::endl;}
+      pose_after = poses[i];
+      if ((pose_after.time.sec > query_time.sec) && (pose_after.time.nsec > query_time.nsec)) {
+        break;
+      }
+      pose_before = pose_after;
+    }
+
+    if (NANOMAP_DEBUG_PRINT){std::cout << "found bookends " << std::endl;}
+    return pose_before.time;
 }
 
 NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before, NanoMapPose const& pose_after, double t_parameter) {

@@ -23,6 +23,7 @@ class NanoMap {
  private:
   void UpdateChainWithLatestPose();
   void TryAddingPointCloudBufferToChain();
+  void TrimPoseMemory();
 
   PoseManager pose_manager;
   FovEvaluatorPtr fov_evaluator_ptr;
