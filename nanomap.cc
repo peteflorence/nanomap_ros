@@ -125,7 +125,7 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (1){
+  if (0){
   std::cout << std::endl;
   std::cout << "point_cloud_buffer.size() " << point_cloud_buffer.size() << std::endl;
   std::cout << "poses.size()"               << pose_manager.GetNumPoses() << std::endl;
