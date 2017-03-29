@@ -54,7 +54,6 @@ void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 con
 }
 
 void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
-  std::cout << R_body_to_rdf(2) << std::endl;
   if (R_body_to_rdf(2) != 1) {
     return;
   }
