@@ -41,11 +41,11 @@ bool PoseManager::CanInterpolatePoseAtTime(NanoMapTime const& query_time) const 
 	if (NANOMAP_DEBUG_PRINT){std::cout << "newest_time " << newest_time.sec << "." << newest_time.nsec << std::endl;}
 
 
-	if ( (query_time.sec <= oldest_time.sec) && (query_time.nsec < oldest_time.nsec) ) {
+	if (oldest_time.GreaterThan(query_time)) {
 		if (NANOMAP_DEBUG_PRINT){std::cout << "returning false 1 in can interpolate" << std::endl;}
 		return false;
 	}
-	if ( (query_time.sec >= newest_time.sec) && (query_time.nsec > newest_time.nsec) ) {
+	if (query_time.GreaterThan(newest_time)) {
 		if (NANOMAP_DEBUG_PRINT){std::cout << "returning false 2 in can interpolate" << std::endl;}
 		return false;
 	}
@@ -72,7 +72,7 @@ NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
     for (int i = oldest_pose_index - 1; i >= 0; i--) {
       if (NANOMAP_DEBUG_PRINT){std::cout << "i is " << i << std::endl;}
       pose_after = poses[i];
-      if ((pose_after.time.sec > query_time.sec) && (pose_after.time.nsec > query_time.nsec)) {
+      if (pose_after.time.GreaterThan(query_time)) {
         break;
       }
       pose_before = pose_after;
@@ -105,7 +105,7 @@ NanoMapTime PoseManager::GetTimeOfPoseBefore(NanoMapTime const& query_time) cons
     for (int i = oldest_pose_index - 1; i >= 0; i--) {
       if (NANOMAP_DEBUG_PRINT){std::cout << "i is " << i << std::endl;}
       pose_after = poses[i];
-      if ((pose_after.time.sec > query_time.sec) && (pose_after.time.nsec > query_time.nsec)) {
+      if (pose_after.time.GreaterThan(query_time)) {
         break;
       }
       pose_before = pose_after;

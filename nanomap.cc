@@ -27,7 +27,7 @@ void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& c
     return;
   }
   NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
-  if ((cloud_time.sec <= oldest_pose_time.sec) && (cloud_time.nsec < oldest_pose_time.nsec)) {
+  if (oldest_pose_time.GreaterThan(cloud_time)) {
     return;
   } 
 

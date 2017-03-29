@@ -20,7 +20,7 @@ NanoMapTime StructuredPointCloudChain::GetOldestCloudTime() const {
 void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 	while (chain.size() >= 0) {
 		NanoMapTime i = chain.back().vertex->GetTime(); 
-		if ( (i.sec <= delete_time.sec) && (i.nsec < delete_time.nsec) ) {
+		if (delete_time.GreaterThan(i)) {
 			chain.pop_back();
 		}
 		else {
