@@ -79,7 +79,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
     sigma           = i->ApplyEdgeTransform(sigma);
-    //sigma           = sigma + Vector3(0.01, 0.01, 0.01);
+    sigma           = sigma + Vector3(0.005, 0.005, 0.005);
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
   	// transform into sensor rdf frame
