@@ -19,7 +19,7 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
   if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPose" << std::endl;}
 }
 
-void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time) {
+void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
   if (NANOMAP_DEBUG_PRINT){std::cout << "In AddPointCloud" << std::endl;}
 
   // do not add if no poses at all or older poses (unlikely we will ever be able to interpolate)
@@ -32,7 +32,7 @@ void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& c
   } 
 
   // build structured_point_cloud and add to buffer
-  StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, fov_evaluator_ptr);
+  StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, frame_id, fov_evaluator_ptr);
   point_cloud_buffer.push_back(new_cloud_ptr);
   if (NANOMAP_DEBUG_PRINT){std::cout << "Pushed on buffer, buffer now this big: " << point_cloud_buffer.size() << std::endl;}
 
