@@ -10,10 +10,13 @@ class PoseManager {
   void DeleteMemoryBeforeTime(NanoMapTime const& time);
 
   NanoMapTime GetMostRecentPoseTime() const;
+  NanoMapTime GetOldestPoseTime() const;
   bool CanInterpolatePoseAtTime(NanoMapTime const& query_time) const;
   bool CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, NanoMapTime const& time_to) const;
   NanoMapPose GetPoseAtTime(NanoMapTime const& query_time);
   Matrix4 GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to);
+
+  size_t GetNumPoses(){return poses.size();};
 
  private:
   NanoMapPose InterpolateBetweenPoses(NanoMapPose const& pose_before, NanoMapPose const& pose_after, double t_parameter);

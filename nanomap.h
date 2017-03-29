@@ -33,6 +33,8 @@ class NanoMap {
   bool received_camera_info;
   bool received_sensor_transform;
 
+  void NanoMapDebugPrintState();
+
 };
 
 #endif

@@ -17,6 +17,7 @@ class StructuredPointCloud {
   	cloud_ptr_ = cloud_ptr;
   	kd_tree_.Initialize(cloud_ptr_, false);
   	fov_evaluator_ = fov_evaluator;
+    cloud_time_ = cloud_time;
   };
 
   NanoMapTime GetTime() const{
