@@ -54,6 +54,7 @@ void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 con
 }
 
 void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
+  std::cout << "receiver R_body_to_rdf " << R_body_to_rdf << std::endl;
   if (R_body_to_rdf(2) != 1) {
     return;
   }
@@ -130,7 +131,7 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (1){
+  if (0){
   std::cout << std::endl;
   std::cout << "received_sensor_transform" << received_sensor_transform << std::endl;
   std::cout << "received_camera_info     " << received_camera_info << std::endl;
