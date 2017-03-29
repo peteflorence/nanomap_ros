@@ -62,6 +62,16 @@ struct NanoMapTime {
   };
   uint32_t sec;
   uint32_t nsec;
+
+  bool GreaterThan(NanoMapTime time_2) const {
+    if (sec > time_2.sec) {
+      return true;
+    }
+    if ((sec >= time_2.sec) && (nsec > time_2.nsec)) {
+      return true;
+    }
+    return false;
+  }
 };
 
 struct NanoMapPose {

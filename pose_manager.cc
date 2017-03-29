@@ -5,13 +5,13 @@ void PoseManager::AddPose(NanoMapPose const& pose) {
 }
 
 void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
-	std::cout << "deleting poses" << std::endl;
+	if (NANOMAP_DEBUG_PRINT){std::cout << "deleting poses" << std::endl;}
 	while (poses.size() >= 0) {
-		std::cout << "deleting another pose" << std::endl;
-		std::cout << "delete time      " << delete_time.sec << "." << delete_time.nsec << std::endl;
+		if (NANOMAP_DEBUG_PRINT){std::cout << "deleting another pose" << std::endl;}
+		if (NANOMAP_DEBUG_PRINT){std::cout << "delete time      " << delete_time.sec << "." << delete_time.nsec << std::endl;}
 		NanoMapPose i = poses.back(); 
-		std::cout << "oldest_pose_time " << i.time.sec << "." << i.time.nsec << std::endl;
-		if ((delete_time.sec > i.time.sec) || ( (delete_time.sec >= i.time.sec) && (delete_time.nsec > i.time.nsec) )) {
+		if (NANOMAP_DEBUG_PRINT){std::cout << "oldest_pose_time " << i.time.sec << "." << i.time.nsec << std::endl;}
+		if (delete_time.GreaterThan(i.time)) {
 			poses.pop_back();
 		}
 		else {
