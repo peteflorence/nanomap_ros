@@ -176,7 +176,7 @@ Matrix4 PoseManager::FindTransform(NanoMapPose const& new_pose, NanoMapPose cons
 	// << previous_pose.quaternion.y() << " " 
 	// << previous_pose.quaternion.z() << std::endl;
 
-	return InvertTransform(FindTransform(new_pose))*FindTransform(previous_pose);
+	return InvertTransform(FindTransform(previous_pose))*FindTransform(new_pose);
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& pose) {
