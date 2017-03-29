@@ -72,6 +72,13 @@ struct NanoMapTime {
     }
     return false;
   }
+
+  bool SameAs(NanoMapTime time_2) const {
+    if ((sec == time_2.sec) && (nsec == time_2.nsec)) {
+      return true;
+    }
+    return false;
+  }
 };
 
 struct NanoMapPose {

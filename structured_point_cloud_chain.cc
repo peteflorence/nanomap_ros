@@ -68,10 +68,13 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
 
   	// transform to previous body frame
+    if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
+    if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
   	// transform into sensor rdf frame
   	search_position_rdf = i->vertex->fov_evaluator_->RotateToSensorFrame(search_position);
+    if(0){std::cout << "search_position_rdf " << search_position_rdf.transpose() << std::endl;}
 
   	// check fov
   	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf);

@@ -89,6 +89,7 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
       NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
       if (NANOMAP_DEBUG_PRINT){std::cout << "## try to get relative transform" << std::endl;}
       Matrix4 new_edge = pose_manager.GetRelativeTransformFromTo(last_pose_time, new_cloud_time);
+      if (NANOMAP_DEBUG_PRINT){std::cout << "## new_edge " << new_edge << std::endl;} 
       if (NANOMAP_DEBUG_PRINT){std::cout << "## try to add edgevertex" << std::endl;}
       structured_point_cloud_chain.AddNextEdgeVertex(new_edge, new_cloud_ptr);
       if (NANOMAP_DEBUG_PRINT){std::cout << "try to pop front of point_cloud_buffer" << std::endl;}

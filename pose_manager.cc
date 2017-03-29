@@ -60,6 +60,11 @@ bool PoseManager::CanInterpolatePosesForTwoTimes(NanoMapTime const& time_from, N
 NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
 	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside GetPoseAtTime" << std::endl;}
 
+	// check if this is newest pose, if it is, return
+	if (query_time.SameAs(poses.front().time)) {
+		return poses.front();
+	}
+
 	// iterate through pose times and find bookends
 	size_t oldest_pose_index = poses.size()-1;
 
@@ -85,6 +90,14 @@ NanoMapPose PoseManager::GetPoseAtTime(NanoMapTime const& query_time) {
     double t_2  = (pose_after.time.sec  - query_time.sec)  * 1.0 + (pose_after.time.nsec - query_time.nsec) / 1.0e9;
 
     double t_parameter = t_1 / (t_1 + t_2);
+    if (t_parameter < 0) {
+    	std::cout << "WARNING, t_parameter < 0, suspected numerical precision problem, thresholding to 0" << std::endl;
+    	t_parameter = 0;
+    } 
+    if (t_parameter > 1) {
+    	std::cout << "WARNING, t_parameter > 1, suspected numerical precision problem, thresholding to 1" << std::endl;
+    	t_parameter = 1;
+    }
 
 	// interpolate
 	return InterpolateBetweenPoses(pose_before, pose_after, t_parameter);
@@ -134,10 +147,12 @@ NanoMapPose PoseManager::InterpolateBetweenPoses(NanoMapPose const& pose_before,
 
 Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, NanoMapTime const& time_to) {
 	if (NANOMAP_DEBUG_PRINT){std::cout << "Inside GetRelativeTransformFromTo" << std::endl;}
-	if (NANOMAP_DEBUG_PRINT){std::cout << "time_from" << time_from.sec << "." << time_from.nsec << std::endl;}
-	if (NANOMAP_DEBUG_PRINT){std::cout << "time_to" << time_to.sec << "." << time_to.nsec << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "time_from " << time_from.sec << "." << time_from.nsec << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "time_to   " << time_to.sec << "." << time_to.nsec << std::endl;}
 	NanoMapPose pose_from = GetPoseAtTime(time_from);
 	NanoMapPose pose_to   = GetPoseAtTime(time_to);
+	if (NANOMAP_DEBUG_PRINT){std::cout << "pose_from" << pose_from.position.transpose() << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "pose_to  " << pose_to.position.transpose() << std::endl;}
 	return FindTransform(pose_from, pose_to);
 }
 
