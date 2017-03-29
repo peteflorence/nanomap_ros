@@ -1,7 +1,8 @@
 #include "fov_evaluator.h"
 
 Vector3 FovEvaluator::RotateToSensorFrame(Vector3 position_body_frame) {
-    return R_body_to_rdf_*position_body_frame;
+  if(0){std::cout << "rotate matrix " << R_body_to_rdf_ << std::endl;}
+  return R_body_to_rdf_*position_body_frame;
 }
 
 bool FovEvaluator::IsBehind(Vector3 position) const {
