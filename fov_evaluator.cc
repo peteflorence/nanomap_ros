@@ -14,7 +14,7 @@ bool FovEvaluator::IsBeyondSensorHorizon(Vector3 position) const {
 }
 
 bool FovEvaluator::IsOutsideDeadBand(Vector3 position) const {
-  return (position.squaredNorm() > 0.5);
+  return (position.squaredNorm() > 0.0);
 }
 
 NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr, Vector3 position, Vector3 aabb, bool ignore_horizon) const {
@@ -61,10 +61,10 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
     }
     // Checks if above top/bottom FOV
     if (std::min(pi_y_right_up_aabb, pi_y) < 0) {
-      return NanoMapFovStatus::free_space; 
+      return NanoMapFovStatus::laterally_outside_fov; 
     }
     if (std::max(pi_y_left_down_aabb, pi_y) > (num_y_pixels - 1)) {
-      return NanoMapFovStatus::free_space; 
+      return NanoMapFovStatus::laterally_outside_fov; 
     }
 
     //Checks for occlusion

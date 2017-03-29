@@ -28,7 +28,7 @@ class StructuredPointCloudChain {
     void ManageChainSize();
 
 	std::deque<EdgeVertex> chain;
-  uint32_t N_max_point_clouds = 1;
+  uint32_t N_max_point_clouds = 150;
 };
 
 #endif
