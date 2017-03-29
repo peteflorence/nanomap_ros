@@ -127,7 +127,7 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (1){
+  if (NANOMAP_DEBUG_PRINT){
   std::cout << std::endl;
   std::cout << "received_sensor_transform" << received_sensor_transform << std::endl;
   std::cout << "received_camera_info     " << received_camera_info << std::endl;
