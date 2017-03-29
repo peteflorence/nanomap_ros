@@ -21,7 +21,7 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
     if (IsBehind(position)) {
       return NanoMapFovStatus::behind;
     }
-    if (IsOutsideDeadBand(position)) {
+    if (!IsOutsideDeadBand(position)) {
       return NanoMapFovStatus::free_space;
     }
 
@@ -35,10 +35,10 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
     }
     // Checks if above top/bottom FOV
     if (pi_y < 0) {
-      return NanoMapFovStatus::laterally_outside_fov; 
+      return NanoMapFovStatus::free_space; 
     }
     if (pi_y > (num_y_pixels - 1)) {
-      return NanoMapFovStatus::laterally_outside_fov; 
+      return NanoMapFovStatus::free_space; 
     }
 
     //Checks for occlusion
