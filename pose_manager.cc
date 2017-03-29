@@ -157,10 +157,26 @@ Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, Na
 	if (transform.block<3,1>(0,3).norm() > 1) {
 		std::cout << "TRANSFORM UNEXPECTEDLY LARGE" << std::endl;
 	}
+	std::cout << transform << std::endl;
+	return transform;
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose) {
-	return FindTransform(previous_pose)*InvertTransform(FindTransform(new_pose));
+	//Matrix4 transform = Eigen::Matrix4d::Identity();
+	//return transform;
+	std::cout << "new_pose " << new_pose.position.transpose() << " " 
+	<< new_pose.quaternion.w() << " " 
+	<< new_pose.quaternion.x() << " " 
+	<< new_pose.quaternion.y() << " " 
+	<< new_pose.quaternion.z() << std::endl;
+
+	std::cout << "previous_pose " << previous_pose.position.transpose() << " " 
+	<< previous_pose.quaternion.w() << " " 
+	<< previous_pose.quaternion.x() << " " 
+	<< previous_pose.quaternion.y() << " " 
+	<< previous_pose.quaternion.z() << std::endl;
+
+	return InvertTransform(FindTransform(new_pose))*FindTransform(previous_pose);
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& pose) {
