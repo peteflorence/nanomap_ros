@@ -68,6 +68,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   NanoMapFovStatus first_fov_status;
   uint32_t first_frame_id;
   Vector3 first_sigma_rdf;
+  Vector3 first_search_position_rdf;
 
   // search through chain
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
@@ -92,6 +93,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   		first_fov_status = fov_status;
   		first_frame_id = i->vertex->frame_id_;
       first_sigma_rdf = sigma_rdf;
+      first_search_position_rdf = search_position_rdf;
       // first_frame_id = i->GetFrameId();
   	}
 
@@ -116,7 +118,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
      	reply.fov_status = fov_status;
      	reply.frame_id = i->vertex->frame_id_;
       //reply.frame_id = i->GetVertex()->GetFrameId();
-     	reply.query_point_in_frame_id = search_position;
+     	reply.query_point_in_frame_id = search_position_rdf;
      	reply.closest_points_in_frame_id = return_points;
       reply.axis_aligned_linear_covariance = sigma_rdf;
      	return reply;
@@ -126,7 +128,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   reply.fov_status = first_fov_status;
   reply.frame_id = first_frame_id;
-  reply.query_point_in_frame_id = args.query_point_current_body_frame;
+  reply.query_point_in_frame_id = first_search_position_rdf;
   reply.closest_points_in_frame_id = std::vector<Vector3>();
   reply.axis_aligned_linear_covariance = first_sigma_rdf;
   return reply;
