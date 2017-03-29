@@ -86,18 +86,21 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
       // first_frame_id = i->GetFrameId();
   	}
 
-  	// if free, do NN and break
+  	// if free, do NN and return
   	if (fov_status == NanoMapFovStatus::free_space) {
 
   		i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
 
   		std::vector<pcl::PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
+      if(1){std::cout << "closest_pts.size() in nanomap kd_tree" << closest_pts.size() << std::endl;}
   		std::vector<Vector3> return_points;
   		if (closest_pts.size() > 0) {
     		for (size_t i = 0; i < std::min((int)closest_pts.size(), num_nearest_neighbors); i++) {
+          if(1){std::cout << "ADDING" << std::endl;}
   				pcl::PointXYZ next_point = closest_pts[i];
      			Vector3 depth_position = Vector3(next_point.x, next_point.y, next_point.z);
      			return_points.push_back(depth_position);
+          if(1){std::cout << "return_points now this big " << return_points.size() << std::endl;}
      		}
      	}
 
@@ -106,7 +109,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
       //reply.frame_id = i->GetVertex()->GetFrameId();
      	reply.query_point_in_frame_id = search_position;
      	reply.closest_points_in_frame_id = return_points;
-     	break;
+     	return reply;
  	  }
 
   }
