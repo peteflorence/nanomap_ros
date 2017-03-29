@@ -157,7 +157,7 @@ Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, Na
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose) {
-	return FindTransform(new_pose)*InvertTransform(FindTransform(previous_pose));
+	return FindTransform(previous_pose)*InvertTransform(FindTransform(new_pose));
 }
 
 Matrix4 PoseManager::FindTransform(NanoMapPose const& pose) {

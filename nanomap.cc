@@ -128,11 +128,13 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (0){
+  if (1){
   std::cout << std::endl;
   std::cout << "point_cloud_buffer.size() " << point_cloud_buffer.size() << std::endl;
   std::cout << "poses.size()"               << pose_manager.GetNumPoses() << std::endl;
-  std::cout << "chain.size()"               << structured_point_cloud_chain.GetChainSize() << std::endl;                 
+  std::cout << "chain.size()"               << structured_point_cloud_chain.GetChainSize() << std::endl;     
+  std::cout << "time of last point cloud  " << structured_point_cloud_chain.GetMostRecentCloudTime().sec << "." << structured_point_cloud_chain.GetMostRecentCloudTime().nsec << std::endl;
+  std::cout << "time of last pose         " << pose_manager.GetMostRecentPoseTime().sec << "." << pose_manager.GetMostRecentPoseTime().nsec << std::endl;            
   std::cout << std::endl;
   }
 }
