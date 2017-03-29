@@ -54,7 +54,6 @@ void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 con
 }
 
 void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
-  std::cout << "R_body_to_rdf " << R_body_to_rdf << std::endl;
   fov_evaluator_ptr->SetBodyToRdf(R_body_to_rdf);
   received_sensor_transform = true;
 }
