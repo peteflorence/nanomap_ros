@@ -93,6 +93,7 @@ struct NanoMapPose {
   Vector3     position;
   Quat        quaternion;
   NanoMapTime time;
+  Vector3     incremental_transform_uncertainty;
 };
 
 #endif

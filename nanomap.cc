@@ -1,4 +1,5 @@
 #include "nanomap.h"
+#include <algorithm>
 
 NanoMap::NanoMap() : 
 received_camera_info(false),
@@ -19,11 +20,16 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
   if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPose" << std::endl;}
 }
 
-void NanoMap::AddPoseUpdates(std::vector<NanoMapPose> const& pose_updates) {
+void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
   // check at least 2 poses in pose updates
   if (pose_updates.size() < 2) {
     if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates" << std::endl;}
     return;
+  }
+
+  // make it so that pose_updates are NEWEST up front, if not then reverse order
+  if (pose_updates.back().time.GreaterThan(pose_updates.front().time)) {
+    std::reverse(pose_updates.begin(), pose_updates.end());
   }
 
   // check at least 10 Hz poses
@@ -37,8 +43,14 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose> const& pose_updates) {
   // delete previous poses in this time frame
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
 
-  // check not too old, and don't want to add
-
+  // add updated poses
+  size_t pose_updates_size = pose_updates.size();
+  for (size_t i = 0; i < pose_updates_size; i++) {
+    if (pose_manager.GetOldestPoseTime().GreaterThan(pose_updates.at(i).time)) {
+      break;
+    }
+    pose_manager.AddPose(pose_updates.at(i));
+  }
 }
 
 void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
