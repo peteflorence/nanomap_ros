@@ -8,6 +8,7 @@ class PoseManager {
 
   void AddPose(NanoMapPose const& pose);
   void DeleteMemoryBeforeTime(NanoMapTime const& time);
+  void DeleteMemoryInBetweenTime(NanoMapTime const& time_before, NanoMapTime const& time_after);
 
   NanoMapTime GetMostRecentPoseTime() const;
   NanoMapTime GetOldestPoseTime() const;

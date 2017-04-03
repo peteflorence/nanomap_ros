@@ -11,6 +11,7 @@ class NanoMap {
   NanoMap();
 
   void AddPose(NanoMapPose const& pose);
+  void AddPoseUpdates(std::vector<NanoMapPose> const& pose_updates);
   void AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id);
   
   void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);

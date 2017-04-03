@@ -20,6 +20,10 @@ void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 	}
 }
 
+void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, NanoMapTime const& time_after) {
+
+}
+
 NanoMapTime PoseManager::GetMostRecentPoseTime() const {
 	return poses.front().time;
 }

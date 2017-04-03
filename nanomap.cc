@@ -19,6 +19,28 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
   if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPose" << std::endl;}
 }
 
+void NanoMap::AddPoseUpdates(std::vector<NanoMapPose> const& pose_updates) {
+  // check at least 2 poses in pose updates
+  if (pose_updates.size() < 2) {
+    if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates" << std::endl;}
+    return;
+  }
+
+  // check at least 10 Hz poses
+  double duration = (pose_updates.front().time.sec  - pose_updates.back().time.sec) * 1.0 + (pose_updates.front().time.nsec - pose_updates.back().time.nsec)/ 1.0e9;
+  double pose_update_frequency = pose_updates.size() / duration;
+  if (pose_update_frequency < 10.0) {
+    if (NANOMAP_DEBUG_PRINT){std::cout << "Only safe to update poses for frequency > 10 Hz" << std::endl;}
+    return;
+  }
+
+  // delete previous poses in this time frame
+  pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
+
+  // check not too old, and don't want to add
+
+}
+
 void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
   if (NANOMAP_DEBUG_PRINT){std::cout << "In AddPointCloud" << std::endl;}
 
