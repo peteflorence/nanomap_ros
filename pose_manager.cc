@@ -21,7 +21,27 @@ void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 }
 
 void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, NanoMapTime const& time_after) {
+	if (NANOMAP_DEBUG_PRINT){std::cout << "deleting poses" << std::endl;}
+	if (poses.size() <= 0) {
+		return;
+	}
+	size_t poses_size = poses.size();
+	for (size_t i = 0; i < poses_size; i++) {
+		// iterating over poses from newest to oldest
 
+		// if pose is too new, continue
+		if (poses.at(i).time.GreaterThan(time_after)) {
+			continue;
+		}
+
+		// if pose is too old, break
+		if (time_before.GreaterThan(poses.at(i).time)) {
+			break;
+		}
+
+		// otherwise, delete pose
+		poses.erase(poses.begin() + i);
+	}
 }
 
 NanoMapTime PoseManager::GetMostRecentPoseTime() const {
