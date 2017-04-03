@@ -25,8 +25,7 @@ void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, Nano
 	if (poses.size() <= 0) {
 		return;
 	}
-	size_t poses_size = poses.size();
-	for (size_t i = 0; i < poses_size; i++) {
+	for (size_t i = 0; i < poses.size(); i++) {
 		// iterating over poses from newest to oldest
 
 		// if pose is too new, continue
