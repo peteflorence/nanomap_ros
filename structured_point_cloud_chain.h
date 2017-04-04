@@ -16,6 +16,7 @@ class StructuredPointCloudChain {
 
   	NanoMapTime GetMostRecentCloudTime() const;
     NanoMapTime GetOldestCloudTime() const;
+    NanoMapTime GetCloudTimeAtIndex(size_t index) const;
   	void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
 
     size_t GetChainSize() const;

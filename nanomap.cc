@@ -51,6 +51,9 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     }
     pose_manager.AddPose(pose_updates.at(i));
   }
+
+  // update only transforms contained entirely within time range
+  UpdateChainInBetweenTimes(pose_updates.back().time, pose_updates.front().time);
 }
 
 void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
@@ -98,6 +101,27 @@ void NanoMap::UpdateChainWithLatestPose() {
     NanoMapTime last_pose_time = pose_manager.GetMostRecentPoseTime();
     Matrix4 updated_transform = pose_manager.GetRelativeTransformFromTo(last_pose_time, previous_cloud_time);
     structured_point_cloud_chain.UpdateEdge(0, updated_transform);
+  }
+}
+
+void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapTime const& time_after) {
+  size_t chain_size = structured_point_cloud_chain.GetChainSize();
+  for (int i = 0; i < (chain_size - 1); i++) {
+    // if older point cloud time is before time_before, continue
+    NanoMapTime time_older_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i+1);
+    if (time_before.GreaterThan(time_older_point_cloud)) {
+      continue;
+    }
+
+    // if newer point cloud time is after time_after, break
+    NanoMapTime time_newer_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i);
+    if (time_newer_point_cloud.GreaterThan(time_after)) {
+      break;
+    }
+
+    // otherwise, update correct edge
+    Matrix4 edge_update = pose_manager.GetRelativeTransformFromTo(time_newer_point_cloud, time_older_point_cloud);
+    structured_point_cloud_chain.UpdateEdge(i+1, edge_update);
   }
 }
 

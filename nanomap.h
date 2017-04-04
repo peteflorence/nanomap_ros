@@ -23,6 +23,7 @@ class NanoMap {
 
  private:
   void UpdateChainWithLatestPose();
+  void UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapTime const& time_after); 
   void TryAddingPointCloudBufferToChain();
   void TrimPoseMemory();
 

@@ -17,6 +17,10 @@ NanoMapTime StructuredPointCloudChain::GetOldestCloudTime() const {
   return chain.back().vertex->GetTime();
 }
 
+NanoMapTime StructuredPointCloudChain::GetCloudTimeAtIndex(size_t index) const {
+  return chain.at(index).vertex->GetTime();
+}
+
 void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 	while (chain.size() >= 0) {
 		NanoMapTime i = chain.back().vertex->GetTime(); 
