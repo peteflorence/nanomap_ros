@@ -106,6 +106,7 @@ void NanoMap::UpdateChainWithLatestPose() {
 
 void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapTime const& time_after) {
   size_t chain_size = structured_point_cloud_chain.GetChainSize();
+  if (chain_size < 2) {return;}
   for (int i = 0; i < (chain_size - 1); i++) {
     // if older point cloud time is before time_before, continue
     NanoMapTime time_older_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i+1);

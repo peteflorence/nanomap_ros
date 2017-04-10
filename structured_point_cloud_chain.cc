@@ -10,15 +10,19 @@ Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
 }
 
 NanoMapTime StructuredPointCloudChain::GetMostRecentCloudTime() const {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "GetMostRecentCloudTime" << std::endl;}
   return chain.at(0).vertex->GetTime();
 }
 
 NanoMapTime StructuredPointCloudChain::GetOldestCloudTime() const {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "GetOldestCloudTime" << std::endl;}
   return chain.back().vertex->GetTime();
 }
 
 NanoMapTime StructuredPointCloudChain::GetCloudTimeAtIndex(size_t index) const {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "GetCloudTimeAtIndex" << std::endl;}
   return chain.at(index).vertex->GetTime();
+  if (NANOMAP_DEBUG_PRINT){std::cout << "got it" << std::endl;}
 }
 
 void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
