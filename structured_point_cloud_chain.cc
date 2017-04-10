@@ -37,6 +37,10 @@ void StructuredPointCloudChain::DeleteMemoryBeforeTime(NanoMapTime const& delete
 	}
 }
 
+void StructuredPointCloudChain::SetNumDepthImageHistory(int N_depth_image_history) {
+  N_max_point_clouds = N_depth_image_history;
+}
+
 size_t StructuredPointCloudChain::GetChainSize() const {
   return chain.size();
 }

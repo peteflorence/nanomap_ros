@@ -85,6 +85,10 @@ void NanoMap::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
   structured_point_cloud_chain.DeleteMemoryBeforeTime(delete_time);
 }
 
+void NanoMap::SetNumDepthImageHistory(int N_depth_image_history) {
+  structured_point_cloud_chain.SetNumDepthImageHistory(N_depth_image_history);
+}
+
 void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
   received_camera_info = true;

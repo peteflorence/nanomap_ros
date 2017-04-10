@@ -19,6 +19,7 @@ class StructuredPointCloudChain {
     NanoMapTime GetCloudTimeAtIndex(size_t index) const;
   	void DeleteMemoryBeforeTime(NanoMapTime const& delete_time);
 
+    void SetNumDepthImageHistory(int N_depth_image_history);
     size_t GetChainSize() const;
   	void UpdateEdge(uint32_t index, Matrix4 const& relative_transform);
   	void AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud);
@@ -29,7 +30,7 @@ class StructuredPointCloudChain {
     void ManageChainSize();
 
 	std::deque<EdgeVertex> chain;
-  uint32_t N_max_point_clouds = 150;
+  int N_max_point_clouds = 1; // default to 1, set to overwrite
 };
 
 #endif
