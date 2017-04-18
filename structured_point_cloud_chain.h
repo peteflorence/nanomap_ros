@@ -26,6 +26,8 @@ class StructuredPointCloudChain {
 
   	NanoMapKnnReply KnnQuery(NanoMapKnnArgs const& args) const;
 
+    std::vector<Matrix4> GetCurrentEdges() const;
+
   private:
     void ManageChainSize();
 

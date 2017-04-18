@@ -9,6 +9,15 @@ Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
   return Vector3(p_aug(0), p_aug(1), p_aug(2));
 }
 
+std::vector<Matrix4> StructuredPointCloudChain::GetCurrentEdges() const {
+  std::vector<Matrix4> edges;
+  int chain_size = chain.size();
+  for (int i = 0; i < chain_size; i ++) {
+    edges.push_back(chain.at(i).edge);
+  }
+  return edges;
+}
+
 NanoMapTime StructuredPointCloudChain::GetMostRecentCloudTime() const {
   if (NANOMAP_DEBUG_PRINT){std::cout << "GetMostRecentCloudTime" << std::endl;}
   return chain.at(0).vertex->GetTime();

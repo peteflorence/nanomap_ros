@@ -175,18 +175,14 @@ void NanoMap::TrimPoseMemory() {
   }
 }
 
-std::vector<NanoMapPose> NanoMap::GetPointCloudPosesCurrentBody() {
-  std::vector<NanoMapPose> poses;  
-  if (structured_point_cloud_chain.GetChainSize()==0) {
-    return poses;
+std::vector<Matrix4> NanoMap::GetCurrentEdges() const {
+  std::vector<Matrix4> edges;  
+  int chain_size = structured_point_cloud_chain.GetChainSize();
+  if (chain_size==0) {
+    return edges;
   }
-  Eigen::Quaterniond quat(0, 0, 0, 0);
-  Vector3 pos = Vector3(0, 0, 0);
-  NanoMapTime nm_time = structured_point_cloud_chain.GetMostRecentCloudTime();
-  NanoMapPose nm_pose(pos, quat, nm_time);
-
-  poses.push_back(nm_pose);
-  return poses;
+  edges = structured_point_cloud_chain.GetCurrentEdges();
+  return edges;
 }
 
 NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {

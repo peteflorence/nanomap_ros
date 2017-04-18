@@ -1,10 +1,9 @@
 #include "nanomap_visualizer.h"
 #include "frustum_visualization.h"
 
-void NanoMapVisualizer::DrawFrustums(std::vector<NanoMapPose> poses) {
+void NanoMapVisualizer::DrawFrustums(std::vector<Matrix4> edges) {
 
 	// iterate over poses
-
 	  int fov_id = 0;
 
       // FIND CORNERS
