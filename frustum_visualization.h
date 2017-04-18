@@ -117,7 +117,7 @@ void BuildLineOfFOV(Vector3 corner_1, Vector3 corner_2, visualization_msgs::Mark
 }
 
 std::vector<visualization_msgs::Marker> BuildFovMarker(int fov_id, Vector3 body, Vector3 corner_1, Vector3 corner_2, Vector3 corner_3, Vector3 corner_4, bool color_in_fov) {
-    std::string drawing_frame = "body";
+    std::string drawing_frame = "world";
     visualization_msgs::Marker marker;
     marker.header.frame_id = drawing_frame;
     marker.header.stamp = ros::Time::now();
@@ -156,7 +156,8 @@ std::vector<visualization_msgs::Marker> BuildFovMarker(int fov_id, Vector3 body,
     markers.push_back(marker);
 
     marker.type = visualization_msgs::Marker::LINE_LIST;
-    marker.ns = "fov_line";
+    marker.id = fov_id+1;
+    marker.ns = "fov_side";
     marker.scale.x = 0.1;
     marker.scale.y = 0.1;
     marker.scale.z = 0.1;
