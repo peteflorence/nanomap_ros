@@ -175,6 +175,20 @@ void NanoMap::TrimPoseMemory() {
   }
 }
 
+std::vector<NanoMapPose> NanoMap::GetPointCloudPosesCurrentBody() {
+  std::vector<NanoMapPose> poses;  
+  if (structured_point_cloud_chain.GetChainSize()==0) {
+    return poses;
+  }
+  Eigen::Quaterniond quat(0, 0, 0, 0);
+  Vector3 pos = Vector3(0, 0, 0);
+  NanoMapTime nm_time = structured_point_cloud_chain.GetMostRecentCloudTime();
+  NanoMapPose nm_pose(pos, quat, nm_time);
+
+  poses.push_back(nm_pose);
+  return poses;
+}
+
 NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
   //std::cout << "Entering KnnQuery" << std::endl;
   if (received_camera_info && received_sensor_transform) {
