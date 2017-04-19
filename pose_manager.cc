@@ -178,7 +178,7 @@ Matrix4 PoseManager::GetRelativeTransformFromTo(NanoMapTime const& time_from, Na
 	if (NANOMAP_DEBUG_PRINT){std::cout << "pose_to  " << pose_to.position.transpose() << std::endl;}
 	Matrix4 transform = FindTransform(pose_from, pose_to);
 	if (transform.block<3,1>(0,3).norm() > 1) {
-		std::cout << "TRANSFORM UNEXPECTEDLY LARGE" << std::endl;
+		//std::cout << "TRANSFORM UNEXPECTEDLY LARGE" << std::endl;
 	}
 	//std::cout << transform << std::endl;
 	return transform;
