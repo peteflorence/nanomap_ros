@@ -30,29 +30,35 @@ void NanoMapVisualizer::DrawFrustums(std::vector<Matrix4> edges) {
 
   //Eigen::Matrix4d transform = transformFromPreviousBodyToWorld(fov_id);
   Matrix4 body_to_world = last_pose;
-  body = applyTransform(body, body_to_world); // don't need to rotate 0,0,0
+  Vector3 corner_0 = applyTransform(body, body_to_world); // don't need to rotate 0,0,0
   Vector3 corner_1 = applyTransform(bottom_right, body_to_world);
   Vector3 corner_2 = applyTransform(top_right, body_to_world);
   Vector3 corner_3 = applyTransform(top_left, body_to_world);
   Vector3 corner_4 = applyTransform(bottom_left, body_to_world);
 
-  PublishFovMarker(0, body, corner_1, corner_2, corner_3, corner_4, true);
+  PublishFovMarker(0, corner_0, corner_1, corner_2, corner_3, corner_4, true);
 
-	for (int i = 0; i < 20; i++) {
-		//transform = invertTransform(edges.at(i));
-		// body = applyTransform(body, transform); // don't need to rotate 0,0,0
-  // 	corner_1 = applyTransform(corner_1, transform);
-  // 	corner_2 = applyTransform(corner_2, transform);
-  // 	corner_3 = applyTransform(corner_3, transform);
-  // 	corner_4 = applyTransform(corner_4, transform);
-  	PublishFovMarker(i+1, body, corner_1, corner_2, corner_3, corner_4, false);
+  Matrix4 transform_so_far;
+  transform_so_far.setIdentity();
+  Matrix4 transform;
+
+	for (int i = 0; i < std::min(20,num_edges); i++) {
+	// 	transform_so_far = edges.at(i) * transform_so_far;
+	//   transform = invertTransform(transform_so_far);
+
+	//   corner_0 = applyTransform(body, body_to_world*transform); // don't need to rotate 0,0,0
+ //   	corner_1 = applyTransform(corner_1, body_to_world*transform);
+ //   	corner_2 = applyTransform(corner_2, body_to_world*transform);
+ //   	corner_3 = applyTransform(corner_3, body_to_world*transform);
+ //   	corner_4 = applyTransform(corner_4, body_to_world*transform);
+   	PublishFovMarker((i+1)*2, corner_0, corner_1, corner_2, corner_3, corner_4, false);
 	}
 
 }
 
 
 void NanoMapVisualizer::PublishFovMarker(int fov_id, Vector3 body, Vector3 corner_1, Vector3 corner_2, Vector3 corner_3, Vector3 corner_4, bool color_in_fov) {
-  std::vector<visualization_msgs::Marker> markers = BuildFovMarker(fov_id*2, body, corner_1, corner_2, corner_3, corner_4, color_in_fov);
-  fov_pub.publish( markers.at(0) );
-  fov_pub.publish( markers.at(1) );
+    std::vector<visualization_msgs::Marker> markers = BuildFovMarker(fov_id, body, corner_1, corner_2, corner_3, corner_4, color_in_fov);
+    fov_pub.publish( markers.at(0) );
+    fov_pub.publish( markers.at(1) );
 }
