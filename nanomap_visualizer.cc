@@ -38,19 +38,16 @@ void NanoMapVisualizer::DrawFrustums(std::vector<Matrix4> edges) {
 
   PublishFovMarker(0, corner_0, corner_1, corner_2, corner_3, corner_4, true);
 
-  Matrix4 transform_so_far;
-  transform_so_far.setIdentity();
-  Matrix4 transform;
+  Matrix4 transform_so_far = body_to_world;
 
-	for (int i = 0; i < std::min(20,num_edges); i++) {
-	// 	transform_so_far = edges.at(i) * transform_so_far;
-	//   transform = invertTransform(transform_so_far);
+	for (int i = 0; i < num_edges; i++) {
+	  transform_so_far = transform_so_far * invertTransform(edges.at(i));
 
-	//   corner_0 = applyTransform(body, body_to_world*transform); // don't need to rotate 0,0,0
- //   	corner_1 = applyTransform(corner_1, body_to_world*transform);
- //   	corner_2 = applyTransform(corner_2, body_to_world*transform);
- //   	corner_3 = applyTransform(corner_3, body_to_world*transform);
- //   	corner_4 = applyTransform(corner_4, body_to_world*transform);
+	  corner_0 = applyTransform(body, transform_so_far); // don't need to rotate 0,0,0
+    corner_1 = applyTransform(bottom_right, transform_so_far);
+    corner_2 = applyTransform(top_right, transform_so_far);
+    corner_3 = applyTransform(top_left, transform_so_far);
+    corner_4 = applyTransform(bottom_left, transform_so_far);
    	PublishFovMarker((i+1)*2, corner_0, corner_1, corner_2, corner_3, corner_4, false);
 	}
 
