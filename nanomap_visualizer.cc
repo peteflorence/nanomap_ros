@@ -48,7 +48,7 @@ void NanoMapVisualizer::DrawFrustums(std::vector<Matrix4> edges) {
     corner_2 = applyTransform(top_right, transform_so_far);
     corner_3 = applyTransform(top_left, transform_so_far);
     corner_4 = applyTransform(bottom_left, transform_so_far);
-   	PublishFovMarker((i+1)*2, corner_0, corner_1, corner_2, corner_3, corner_4, false);
+   	if (i % 5 == 0){PublishFovMarker((i+1)*2, corner_0, corner_1, corner_2, corner_3, corner_4, false);}
 	}
 
 }
