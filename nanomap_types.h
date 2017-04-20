@@ -21,6 +21,7 @@ typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudPtr;
 struct NanoMapKnnArgs {
   Vector3               query_point_current_body_frame;
   Vector3               axis_aligned_linear_covariance;
+  bool                  early_exit;
 };
 
 enum class NanoMapFovStatus { 

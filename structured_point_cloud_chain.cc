@@ -121,7 +121,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	}
 
   	// if free, do NN and return
-  	if (fov_status == NanoMapFovStatus::free_space) {
+  	if (fov_status == NanoMapFovStatus::free_space || args.early_exit) {
 
       //std::cout << "num_history " << num_history << std::endl;
 

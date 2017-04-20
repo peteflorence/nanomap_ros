@@ -22,7 +22,7 @@ void PoseManager::AddPose(NanoMapPose const& pose) {
 		}
 	}
 
-	CheckMonotonic();
+	if (NANOMAP_DEBUG_PRINT){CheckMonotonic();}
 }
 
 void PoseManager::CheckMonotonic() const {
@@ -35,11 +35,9 @@ void PoseManager::CheckMonotonic() const {
 		}
 		else {
 			older_pose = poses.at(i);
-			if (1) {
-				if (older_pose.time.GreaterThan(newer_pose.time)) {
-					std::cout << "WARNING NOT MONOTONIC POSES" << std::endl;
-				} 
-			}
+			if (older_pose.time.GreaterThan(newer_pose.time)) {
+				std::cout << "WARNING NOT MONOTONIC POSES" << std::endl;
+			} 
 		}
 	}
 }
