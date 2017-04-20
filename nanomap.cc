@@ -23,7 +23,7 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
 void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
   // check at least 2 poses in pose updates
   if (pose_updates.size() < 2) {
-    if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates" << std::endl;}
+    if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates of 2 or more at a time (for interpolation purposes)" << std::endl;}
     return;
   }
 
@@ -40,7 +40,7 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     return;
   }
 
-  // delete previous poses in this time frame
+  // delete previous poses in this time frame 
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
 
   // add updated poses
@@ -200,7 +200,7 @@ NanoMapKnnReply NanoMap::KnnQuery(NanoMapKnnArgs const& args) const {
 }
 
 void NanoMap::NanoMapDebugPrintState() {
-  if (0){
+  if (NANOMAP_DEBUG_PRINT){
   std::cout << std::endl;
   std::cout << "received_sensor_transform" << received_sensor_transform << std::endl;
   std::cout << "received_camera_info     " << received_camera_info << std::endl;

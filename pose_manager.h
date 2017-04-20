@@ -25,6 +25,7 @@ class PoseManager {
   Matrix4 FindTransform(NanoMapPose const& new_pose, NanoMapPose const& previous_pose);
   Matrix4 FindTransform(NanoMapPose const& pose);
   Matrix4 InvertTransform(Matrix4 const& transform);
+  void CheckMonotonic() const;
 
   std::deque<NanoMapPose> poses;
 

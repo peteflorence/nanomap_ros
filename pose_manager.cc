@@ -1,7 +1,47 @@
 #include "pose_manager.h"
 
 void PoseManager::AddPose(NanoMapPose const& pose) {
-	poses.push_front(pose);
+	size_t poses_size = poses.size();
+	if (poses_size <= 0) {
+		poses.push_front(pose);
+		return;
+	}
+
+	// new poses
+	if (pose.time.GreaterThan(poses.front().time)) {
+		poses.push_front(pose);
+		return;
+	}
+
+	// older poses
+	for (size_t i = 0; i < poses_size; i++) {
+		if (pose.time.GreaterThan(poses.at(i).time)) {
+			//NanoMapPose array[] = {}; 
+			poses.insert(poses.begin() + i, pose);
+			return;
+		}
+	}
+
+	CheckMonotonic();
+}
+
+void PoseManager::CheckMonotonic() const {
+	NanoMapPose newer_pose;
+	NanoMapPose older_pose;
+	for (size_t i = 0; i < poses.size(); i++) {
+		if (i == 0) {
+			newer_pose = poses.at(i);
+			continue;
+		}
+		else {
+			older_pose = poses.at(i);
+			if (1) {
+				if (older_pose.time.GreaterThan(newer_pose.time)) {
+					std::cout << "WARNING NOT MONOTONIC POSES" << std::endl;
+				} 
+			}
+		}
+	}
 }
 
 void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
@@ -25,21 +65,24 @@ void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, Nano
 	if (poses.size() <= 0) {
 		return;
 	}
+
+	int num_deleted = 0;
 	for (size_t i = 0; i < poses.size(); i++) {
 		// iterating over poses from newest to oldest
 
 		// if pose is too new, continue
-		if (poses.at(i).time.GreaterThan(time_after)) {
+		if (poses.at(i-num_deleted).time.GreaterThan(time_after)) {
 			continue;
 		}
 
 		// if pose is too old, break
-		if (time_before.GreaterThan(poses.at(i).time)) {
+		if (time_before.GreaterThan(poses.at(i-num_deleted).time)) {
 			break;
 		}
 
 		// otherwise, delete pose
-		poses.erase(poses.begin() + i);
+		poses.erase(poses.begin() + (i-num_deleted));
+		num_deleted++;
 	}
 }
 
