@@ -6,7 +6,7 @@ Vector3 FovEvaluator::RotateToSensorFrame(Vector3 position_body_frame) {
 }
 
 bool FovEvaluator::IsBehind(Vector3 position) const {
-  return (position(2) < -0.5);
+  return (position(2) < 0.0);
 }
 
 bool FovEvaluator::IsBeyondSensorHorizon(Vector3 position) const {
@@ -22,9 +22,12 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
       if (aabb(i) < 0) {aabb(i) = -aabb(i);}
     }
 
-    Vector3 behind_aabb = position;// + Vector3(0,0,-aabb(2));
-    Vector3 beyond_aabb = position;// + Vector3(0,0,aabb(2));
-    if (IsBehind(behind_aabb)) {
+    Vector3 behind_aabb = position;// + Vector3(0,0,-0.3);
+    Vector3 beyond_aabb = position;// + Vector3(0,0,0.3);
+    if (IsBehind(behind_aabb + Vector3(0.0,0.0,0.5)) && ignore_horizon) {
+      return NanoMapFovStatus::behind;
+    }
+    else if (IsBehind(behind_aabb)) {
       return NanoMapFovStatus::behind;
     }
     if (!IsOutsideDeadBand(position) && ignore_horizon) {
