@@ -22,12 +22,12 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const& point_cloud_ptr,
       if (aabb(i) < 0) {aabb(i) = -aabb(i);}
     }
 
-    Vector3 behind_aabb = position;// + Vector3(0,0,-0.3);
-    Vector3 beyond_aabb = position;// + Vector3(0,0,0.3);
+    Vector3 behind_aabb = position + Vector3(0,0,0.0);
+    Vector3 beyond_aabb = position + Vector3(0,0,0.0);
     if (IsBehind(behind_aabb + Vector3(0.0,0.0,0.5)) && ignore_horizon) {
       return NanoMapFovStatus::behind;
     }
-    else if (IsBehind(behind_aabb)) {
+    else if (IsBehind(behind_aabb) && !ignore_horizon) {
       return NanoMapFovStatus::behind;
     }
     if (!IsOutsideDeadBand(position) && ignore_horizon) {
