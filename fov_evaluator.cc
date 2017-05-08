@@ -10,7 +10,7 @@ bool FovEvaluator::IsBehind(Vector3 position) const {
 }
 
 bool FovEvaluator::IsBeyondSensorHorizon(Vector3 position) const {
-  return (position(2) > 10.0);
+  return (position(2) > sensor_range_);
 }
 
 bool FovEvaluator::IsOutsideDeadBand(Vector3 position) const {
@@ -93,6 +93,10 @@ void FovEvaluator::SetCameraInfo(double bin, double width, double height, Matrix
   K /= binning;
   K(2,2) = 1.0;
   return;
+}
+
+void FovEvaluator::SetSensorRange(double range) {
+  sensor_range_ = range;
 }
 
 void FovEvaluator::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {

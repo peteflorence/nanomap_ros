@@ -89,6 +89,10 @@ void NanoMap::SetNumDepthImageHistory(int N_depth_image_history) {
   structured_point_cloud_chain.SetNumDepthImageHistory(N_depth_image_history);
 }
 
+void NanoMap::SetSensorRange(double range) {
+  fov_evaluator_ptr->SetSensorRange(range);
+}
+
 void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 const& K_camera_info) {
   fov_evaluator_ptr->SetCameraInfo(bin, width, height, K_camera_info);
   received_camera_info = true;
