@@ -22,10 +22,11 @@ void NanoMapVisualizer::DrawFrustums(std::vector<Matrix4> edges) {
   BodyToRDF_inverse << 0, 0, 1, -1, 0, 0, 0, -1, 0;
 
   // start in that poses' rdf, and rotate to body
-  Vector3 bottom_right = BodyToRDF_inverse * Vector3(7,5.25,10);
-  Vector3 top_right = BodyToRDF_inverse * Vector3(7,-5.25,10);
-  Vector3 top_left = BodyToRDF_inverse * Vector3(-7,-5.25,10);
-  Vector3 bottom_left = BodyToRDF_inverse * Vector3(-7,5.25,10);
+  double range = 20.0;
+  Vector3 bottom_right = BodyToRDF_inverse * Vector3(14,10.5,range);
+  Vector3 top_right = BodyToRDF_inverse * Vector3(14,-10.5,range);
+  Vector3 top_left = BodyToRDF_inverse * Vector3(-14,-10.5,range);
+  Vector3 bottom_left = BodyToRDF_inverse * Vector3(-14,10.5,range);
   Vector3 body = Vector3(0,0,0);
 
   //Eigen::Matrix4d transform = transformFromPreviousBodyToWorld(fov_id);
