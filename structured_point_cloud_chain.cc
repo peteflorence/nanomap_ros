@@ -9,6 +9,10 @@ Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
   return Vector3(p_aug(0), p_aug(1), p_aug(2));
 }
 
+Vector3 EdgeVertex::ApplyEdgeRotation(Vector3 p) const {
+  return edge.block<3,3>(0,0) * p;
+}
+
 std::vector<Matrix4> StructuredPointCloudChain::GetCurrentEdges() const {
   std::vector<Matrix4> edges;
   int chain_size = chain.size();
@@ -99,7 +103,14 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	// transform to previous body frame
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
-    sigma           = i->ApplyEdgeTransform(sigma);
+   
+    // make non-negative
+    for (int i = 0; i <3; i++) {
+      if (sigma(i) < 0) {
+        sigma(i)=-sigma(i);
+      }
+    }
+    sigma           = i->ApplyEdgeRotation(sigma);
     sigma           = sigma + Vector3(0.005, 0.005, 0.005);
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
