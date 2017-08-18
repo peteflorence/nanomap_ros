@@ -120,7 +120,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
     if(0){std::cout << "search_position_rdf " << search_position_rdf.transpose() << std::endl;}
 
   	// check fov
-  	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf, sigma_rdf, (i == chain.cbegin()));
+  	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf, sigma_rdf*0.0, (i == chain.cbegin()));
     // switch to this
     // NanoMapFovStatus fov_status = i->EvaluateFov(search_position_rdf);
   	if (i == chain.cbegin()) {
@@ -132,7 +132,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	}
 
   	// if free, do NN and return
-  	if (fov_status == NanoMapFovStatus::free_space || args.early_exit) {
+    if (fov_status == NanoMapFovStatus::free_space || args.early_exit) {
 
       //std::cout << "num_history " << num_history << std::endl;
 
