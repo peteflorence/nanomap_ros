@@ -111,7 +111,9 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
       }
     }
     sigma           = i->ApplyEdgeRotation(sigma);
-    sigma           = sigma + Vector3(0.005, 0.005, 0.005);
+    //double sigma_each_direction = 0.013; // sigma increase up to 2 meters over 150
+    double sigma_each_direction = 0.0;   // no sigma increase
+    sigma           = sigma + Vector3(sigma_each_direction, sigma_each_direction, sigma_each_direction);
     if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
 
   	// transform into sensor rdf frame
