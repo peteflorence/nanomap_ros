@@ -105,7 +105,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	search_position = i->ApplyEdgeTransform(search_position);
     sigma           = i->ApplyEdgeRotation(sigma);
     //double sigma_each_direction = 0.013; // sigma increase up to 2 meters over 150
-    sigma           = sigma + Vector3(0.0, 0.0, 0.0);
+    sigma           = sigma + Vector3(0.03, 0.03, 0.03);
     
   	// transform into sensor rdf frame
   	search_position_rdf = i->vertex->fov_evaluator_->RotateToSensorFrame(search_position);
