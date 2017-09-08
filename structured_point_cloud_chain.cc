@@ -95,67 +95,47 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   Vector3 first_sigma_rdf;
   Vector3 first_search_position_rdf;
 
+
   // search through chain
   size_t num_history;
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
     num_history++;
 
   	// transform to previous body frame
-    if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
   	search_position = i->ApplyEdgeTransform(search_position);
-   
-    // make non-negative
-    for (int i = 0; i <3; i++) {
-      if (sigma(i) < 0) {
-        sigma(i)=-sigma(i);
-      }
-    }
     sigma           = i->ApplyEdgeRotation(sigma);
     //double sigma_each_direction = 0.013; // sigma increase up to 2 meters over 150
-    double sigma_each_direction = 0.0;   // no sigma increase
-    sigma           = sigma + Vector3(sigma_each_direction, sigma_each_direction, sigma_each_direction);
-    if(0){std::cout << "search position " << search_position.transpose() << std::endl;}
-
+    sigma           = sigma + Vector3(0.0, 0.0, 0.0);
+    
   	// transform into sensor rdf frame
   	search_position_rdf = i->vertex->fov_evaluator_->RotateToSensorFrame(search_position);
     sigma_rdf           = i->vertex->fov_evaluator_->RotateToSensorFrame(sigma);
-    if(0){std::cout << "search_position_rdf " << search_position_rdf.transpose() << std::endl;}
 
   	// check fov
   	NanoMapFovStatus fov_status = i->vertex->fov_evaluator_->EvaluateFov(i->vertex->cloud_ptr_, search_position_rdf, sigma_rdf*0.0, (i == chain.cbegin()));
-    // switch to this
-    // NanoMapFovStatus fov_status = i->EvaluateFov(search_position_rdf);
+    //NanoMapFovStatus fov_status = NanoMapFovStatus::behind;
+
   	if (i == chain.cbegin()) {
   		first_fov_status = fov_status;
   		first_frame_id = i->vertex->frame_id_;
       first_sigma_rdf = sigma_rdf;
       first_search_position_rdf = search_position_rdf;
-      // first_frame_id = i->GetFrameId();
   	}
 
   	// if free, do NN and return
     if (fov_status == NanoMapFovStatus::free_space || args.early_exit) {
-
-      //std::cout << "num_history " << num_history << std::endl;
-
   		i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
-
   		std::vector<pcl::PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
-      if(0){std::cout << "closest_pts.size() in nanomap kd_tree" << closest_pts.size() << std::endl;}
   		std::vector<Vector3> return_points;
   		if (closest_pts.size() > 0) {
     		for (size_t j = 0; j < std::min((int)closest_pts.size(), num_nearest_neighbors); j++) {
-          if(0){std::cout << "ADDING" << std::endl;}
   				pcl::PointXYZ next_point = closest_pts[j];
      			Vector3 depth_position = Vector3(next_point.x, next_point.y, next_point.z);
      			return_points.push_back(depth_position);
-          if(0){std::cout << "return_points now this big " << return_points.size() << std::endl;}
      		}
      	}
-
      	reply.fov_status = fov_status;
      	reply.frame_id = i->vertex->frame_id_;
-      //reply.frame_id = i->GetVertex()->GetFrameId();
      	reply.query_point_in_frame_id = search_position_rdf;
      	reply.closest_points_in_frame_id = return_points;
       reply.axis_aligned_linear_covariance = sigma_rdf;
