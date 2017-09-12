@@ -68,6 +68,12 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "nanomap_benchmarker");
+    
+    Matrix3 K;
+    K << 205.27, 0.0, 160.0, 0.0, 205.27, 120.0, 0.0, 0.0, 1.0;
+    nanomap.SetCameraInfo(1.0, 320.0, 240.0, K);
+
+
     datafile << "point_cloud_count, sequence_number, time(ms), insertion_time(ms), distance_update_time(ms), sample_time(ms)" << std::endl;
 
     ros::NodeHandle nh;
