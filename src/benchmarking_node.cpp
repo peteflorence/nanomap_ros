@@ -7,6 +7,7 @@
 
 #include "stopwatch.h"
 #include <fstream>
+#include <nav_msgs/Path.h>
 
 #include "nanomap.h"
 
@@ -64,6 +65,20 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
 
   datafile << point_cloud_count << "," << msg.header.seq << "," << global_time.ElapsedMillis() << "," << insertion_time << "," << distance_update_time << "," << sample_time << std::endl;
   std::cout << "Processed point cloud: " << point_cloud_count << std::endl;
+}
+
+void SmoothedPosesCallback(nav_msgs::Path path) {
+  std::vector<NanoMapPose> smoothed_path_vector;
+  size_t path_size = path.poses.size();
+  for (size_t i = 0; i < path_size; i++) {
+    geometry_msgs::PoseStamped pose = path.poses.at(i);
+    Eigen::Quaterniond quat(pose.pose.orientation.w, pose.pose.orientation.x, pose.pose.orientation.y, pose.pose.orientation.z);
+    Vector3 pos = Vector3(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+    NanoMapTime nm_time(pose.header.stamp.sec, pose.header.stamp.nsec);
+    NanoMapPose nm_pose(pos, quat, nm_time);
+    smoothed_path_vector.push_back(nm_pose);
+  }
+  nanomap.AddPoseUpdates(smoothed_path_vector);
 }
 
 int main(int argc, char** argv) {
