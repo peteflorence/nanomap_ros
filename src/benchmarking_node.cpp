@@ -51,17 +51,18 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
 
   sw.Start();
   int num_samples = 10;
-  float rad = 5;
-  float delta = rad/(num_samples-1);
+  float rad = 5.0;
+  float delta = 2*rad/(num_samples-1)-.0001; // subtraction needed to get floating point happy in loop
   
   NanoMapKnnArgs args;
   args.axis_aligned_linear_covariance = Vector3(0.1, 0.1, 0.1);
   args.early_exit = false;
   args.query_point_current_body_frame = Vector3(3.0, 0.0, 0.0);
-
-  for (float x = -rad; x < rad; x += delta) {
-    for (float y = -rad; y < rad; y += delta) {
-      for (float z = -rad; z < rad; z += delta) {
+  //int ni = 0;
+  for (float x = -rad; x <= rad; x =x+delta) {
+    for (float y = -rad; y <= rad; y =y+delta) {
+      for (float z = -rad; z <= rad; z =z+delta) {
+         //ni++;
          args.query_point_current_body_frame = Vector3(x, y, z);
          NanoMapKnnReply reply = nanomap.KnnQuery(args);	
       }
@@ -70,6 +71,7 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   sw.Stop();
   float sample_time = sw.ElapsedMillis();
   std::cout << "sample_time: " << sample_time << std::endl;
+  //std::cout << "num queries " << ni << std::endl;
 
   point_cloud_count++;
   datafile << point_cloud_count << "," << msg.header.seq << "," << global_time.ElapsedMillis() << "," << insertion_time << "," << distance_update_time << "," << sample_time << std::endl;
