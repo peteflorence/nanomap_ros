@@ -62,7 +62,7 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   for (float x = -rad; x < rad; x += delta) {
     for (float y = -rad; y < rad; y += delta) {
       for (float z = -rad; z < rad; z += delta) {
-         //args.query_point_current_body_frame = Vector3(x, y, z);
+         args.query_point_current_body_frame = Vector3(x, y, z);
          NanoMapKnnReply reply = nanomap.KnnQuery(args);	
       }
     }
@@ -71,6 +71,7 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   float sample_time = sw.ElapsedMillis();
   std::cout << "sample_time: " << sample_time << std::endl;
 
+  point_cloud_count++;
   datafile << point_cloud_count << "," << msg.header.seq << "," << global_time.ElapsedMillis() << "," << insertion_time << "," << distance_update_time << "," << sample_time << std::endl;
   std::cout << "Processed point cloud: " << point_cloud_count << std::endl;
 }
