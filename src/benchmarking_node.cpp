@@ -8,6 +8,10 @@
 #include "stopwatch.h"
 #include <fstream>
 
+#include "nanomap.h"
+
+
+NanoMap nanomap;
 
 bool initialized = false;
 tf2_ros::Buffer* tf_buffer;
@@ -28,7 +32,13 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
     return;
   }
 
-  
+  pcl::PCLPointCloud2 cloud2_rdf;
+  pcl_conversions::toPCL(msg, cloud2_rdf);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_rdf(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::fromPCLPointCloud2(cloud2_rdf,*cloud_rdf);
+  NanoMapTime nm_time(msg.header.stamp.sec, msg.header.stamp.nsec);
+  nanomap.AddPointCloud(cloud_rdf, nm_time, msg.header.seq);
+
   float insertion_time = sw.ElapsedMillis();
   
   sw.Start();
