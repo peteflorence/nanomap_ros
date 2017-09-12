@@ -16,13 +16,9 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
   cv_bridge
   image_transport
-  acl_fsw
   message_generation
   sensor_msgs
-  mavros_msgs
   pcl_ros
-  fla_msgs
-  fla_utils
 )
 
 find_package( Eigen3 REQUIRED )

@@ -50,13 +50,9 @@
   <build_depend>std_srvs</build_depend>
   <build_depend>message_generation</build_depend>
   <build_depend>nav_msgs</build_depend>
-  <build_depend>acl_fsw</build_depend>
   <build_depend>rosbag</build_depend>
   <build_depend>roslib</build_depend>
-  <build_depend>fla_msgs</build_depend>
-  <build_depend>fla_utils</build_depend>
   <build_depend>sensor_msgs</build_depend>
-  <build_depend>mavros_msgs</build_depend>
   <build_depend>pcl_ros</build_depend>
 
   <run_depend>roscpp</run_depend>
@@ -67,12 +63,8 @@
   <run_depend>tf</run_depend>
   <run_depend>tf2</run_depend>
   <run_depend>nav_msgs</run_depend>
-  <run_depend>acl_fsw</run_depend>
   <run_depend>message_runtime</run_depend>
-  <run_depend>fla_msgs</run_depend>
-  <run_depend>fla_utils</run_depend>
   <run_depend>sensor_msgs</run_depend>
-  <run_depend>mavros_msgs</run_depend>
    <run_depend>pcl_ros</run_depend>
 
   
