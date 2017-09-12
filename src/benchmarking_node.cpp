@@ -67,6 +67,14 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   std::cout << "Processed point cloud: " << point_cloud_count << std::endl;
 }
 
+void PoseCallback(geometry_msgs::PoseStamped const& pose) {
+  Eigen::Quaterniond quat(pose.pose.orientation.w, pose.pose.orientation.x, pose.pose.orientation.y, pose.pose.orientation.z);
+  Vector3 pos = Vector3(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+  NanoMapTime nm_time(pose.header.stamp.sec, pose.header.stamp.nsec);
+  NanoMapPose nm_pose(pos, quat, nm_time);
+  nanomap.AddPose(nm_pose);
+}
+
 void SmoothedPosesCallback(nav_msgs::Path path) {
   std::vector<NanoMapPose> smoothed_path_vector;
   size_t path_size = path.poses.size();
@@ -100,6 +108,8 @@ int main(int argc, char** argv) {
     tf_listener = new tf2_ros::TransformListener(*tf_buffer);
 
     ros::Subscriber pcl_sub = nh.subscribe("/flight/r200/points_xyz", 100, &PointCloudCallback);
+    ros::Subscriber pose_updates_sub = nh.subscribe("/samros/keyposes", 100, &SmoothedPosesCallback);
+    ros::Subscriber pose_sub = nh.subscribe("/pose", 100, &PoseCallback);
     global_time.Start();
     ros::spin();
 
