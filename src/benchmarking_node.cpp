@@ -53,16 +53,23 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   int num_samples = 10;
   float rad = 5;
   float delta = rad/(num_samples-1);
+  
+  NanoMapKnnArgs args;
+  args.axis_aligned_linear_covariance = Vector3(0.1, 0.1, 0.1);
+  args.early_exit = false;
+  args.query_point_current_body_frame = Vector3(3.0, 0.0, 0.0);
+
   for (float x = -rad; x < rad; x += delta) {
     for (float y = -rad; y < rad; y += delta) {
       for (float z = -rad; z < rad; z += delta) {
-	//octomap::point3d query_point = sensor_origin + octomap::point3d(x, y, z);
-	//distmap.getDistanceAndClosestObstacle(query_point, distance, closestObst);
+         //args.query_point_current_body_frame = Vector3(x, y, z);
+         NanoMapKnnReply reply = nanomap.KnnQuery(args);	
       }
     }
   }
   sw.Stop();
   float sample_time = sw.ElapsedMillis();
+  std::cout << "sample_time: " << sample_time << std::endl;
 
   datafile << point_cloud_count << "," << msg.header.seq << "," << global_time.ElapsedMillis() << "," << insertion_time << "," << distance_update_time << "," << sample_time << std::endl;
   std::cout << "Processed point cloud: " << point_cloud_count << std::endl;
@@ -95,7 +102,7 @@ int main(int argc, char** argv) {
     
     Matrix3 K;
     K << 205.27, 0.0, 160.0, 0.0, 205.27, 120.0, 0.0, 0.0, 1.0;
-    nanomap.SetCameraInfo(1.0, 320.0, 240.0, K);
+    nanomap.SetCameraInfo(4.0, 320.0, 240.0, K); // this K matrix was for binned, but the actual data is not binned
     nanomap.SetSensorRange(20.0);
     nanomap.SetNumDepthImageHistory(150);
     Matrix3 body_to_rdf;
