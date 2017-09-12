@@ -41,12 +41,13 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
   nanomap.AddPointCloud(cloud_rdf, nm_time, msg.header.seq);
 
   float insertion_time = sw.ElapsedMillis();
-  
+  std::cout << "insertion_time: " << insertion_time << std::endl;
+ 
   sw.Start();
 
   sw.Stop();
   float distance_update_time = sw.ElapsedMillis();
-  std::cout << "distance_update_time: " << distance_update_time << std::endl;
+  //std::cout << "distance_update_time: " << distance_update_time << std::endl;
 
   sw.Start();
   int num_samples = 10;
