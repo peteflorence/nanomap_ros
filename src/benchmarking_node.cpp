@@ -72,7 +72,11 @@ int main(int argc, char** argv) {
     Matrix3 K;
     K << 205.27, 0.0, 160.0, 0.0, 205.27, 120.0, 0.0, 0.0, 1.0;
     nanomap.SetCameraInfo(1.0, 320.0, 240.0, K);
-
+    nanomap.SetSensorRange(20.0);
+    nanomap.SetNumDepthImageHistory(150);
+    Matrix3 body_to_rdf;
+    body_to_rdf << 0, -1, 0, 0, 0, -1, 1, 0, 0;
+    nanomap.SetBodyToRdf(body_to_rdf);
 
     datafile << "point_cloud_count, sequence_number, time(ms), insertion_time(ms), distance_update_time(ms), sample_time(ms)" << std::endl;
 
