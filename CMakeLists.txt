@@ -45,7 +45,8 @@ find_library(OROCOS_KDL orocos-kdl)
 set(orocos_kdl_LIBRARIES ${OROCOS_KDL})
 
 
-add_library( nanomap_ros src/nanomap.cc src/pose_manager.cc src/structured_point_cloud_chain.cc src/fov_evaluator.cc src/nanomap_visualizer.cc)
+add_library( nanomap_ros src/nanomap.cc src/pose_manager.cc src/structured_point_cloud_chain.cc src/fov_evaluator.cc src/nanomap_visualizer.cc )
 
-target_link_libraries( nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
+add_executable( benchmarking_node src/benchmarking_node.cpp )
+target_link_libraries( benchmarking_node nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
 
