@@ -70,6 +70,10 @@ void StructuredPointCloudChain::SetBodyToRdf(Matrix3 const& body_to_rdf) {
 void StructuredPointCloudChain::UpdateEdge(uint32_t index, Matrix4 const& relative_transform) {
   chain.at(index).edge = relative_transform;
   chain.at(index).edge_rotation_only = relative_transform.block<3,3>(0,0);
+  if (index = 0) {
+    chain.at(0).edge_rdf = _body_to_rdf_4 * relative_transform;
+    chain.at(0).edge_rdf_rotation_only = _body_to_rdf * relative_transform.block<3,3>(0,0);
+  }
   chain.at(index).edge_rdf = _body_to_rdf_4 *  relative_transform * _body_to_rdf_4_inverse;
   chain.at(index).edge_rdf_rotation_only = _body_to_rdf * relative_transform.block<3,3>(0,0) * _body_to_rdf_inverse;
 }
@@ -82,9 +86,10 @@ void StructuredPointCloudChain::ManageChainSize() {
 
 void StructuredPointCloudChain::AddNextEdgeVertex(Matrix4 const& new_edge, StructuredPointCloudPtr const& new_cloud) {
 	EdgeVertex new_edge_vertex;
-	new_edge_vertex.edge = new_edge;
+	//new_edge_vertex.edge = new_edge;
 	new_edge_vertex.vertex = new_cloud;
 	chain.push_front(new_edge_vertex);
+  UpdateEdge(0,new_edge);
   ManageChainSize();
 }
 
@@ -99,6 +104,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   Vector3 search_position = args.query_point_current_body_frame;
   Vector3 search_position_rdf = _body_to_rdf * search_position;
 
+
   Vector3 sigma = args.axis_aligned_linear_covariance;
   Vector3 sigma_rdf = _body_to_rdf * sigma;
 
@@ -110,7 +116,6 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   // search through chain
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
-
   	// transform to previous body frame
   	search_position_rdf = i->ApplyEdgeTransform(search_position_rdf, i->edge_rdf);
     sigma_rdf           = i->ApplyEdgeRotation(sigma_rdf, i->edge_rdf_rotation_only);
