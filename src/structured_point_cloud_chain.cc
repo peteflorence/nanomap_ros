@@ -2,14 +2,14 @@
 
 #define num_nearest_neighbors 1
 
-Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 p) const {
+Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 const& p) const {
   Vector4 p_aug;
   p_aug << p, 1.0;
   p_aug = edge * p_aug;
   return Vector3(p_aug(0), p_aug(1), p_aug(2));
 }
 
-Vector3 EdgeVertex::ApplyEdgeRotation(Vector3 p) const {
+Vector3 EdgeVertex::ApplyEdgeRotation(Vector3 const& p) const {
   return edge.block<3,3>(0,0) * p;
 }
 
