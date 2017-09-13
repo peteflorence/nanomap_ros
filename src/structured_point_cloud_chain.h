@@ -9,7 +9,8 @@ struct EdgeVertex {
   Vector3                 ApplyEdgeTransform(Vector3 const& p) const;
   Vector3                 ApplyEdgeRotation(Vector3 const& p) const;
 	Matrix4				 	        edge;
-	StructuredPointCloudPtr vertex;
+  Matrix3                 edge_rotation_only;	
+  StructuredPointCloudPtr vertex;
 };
 
 class StructuredPointCloudChain {

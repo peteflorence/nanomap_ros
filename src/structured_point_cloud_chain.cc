@@ -10,7 +10,7 @@ Vector3 EdgeVertex::ApplyEdgeTransform(Vector3 const& p) const {
 }
 
 Vector3 EdgeVertex::ApplyEdgeRotation(Vector3 const& p) const {
-  return edge.block<3,3>(0,0) * p;
+  return edge_rotation_only * p;
 }
 
 std::vector<Matrix4> StructuredPointCloudChain::GetCurrentEdges() const {
@@ -60,6 +60,7 @@ size_t StructuredPointCloudChain::GetChainSize() const {
 
 void StructuredPointCloudChain::UpdateEdge(uint32_t index, Matrix4 const& relative_transform) {
 	chain.at(index).edge = relative_transform;
+  chain.at(index).edge_rotation_only = relative_transform.block<3,3>(0,0);
 }
 
 void StructuredPointCloudChain::ManageChainSize() {
