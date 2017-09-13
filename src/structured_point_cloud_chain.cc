@@ -97,9 +97,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
 
   // search through chain
-  size_t num_history;
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
-    num_history++;
 
   	// transform to previous body frame
   	search_position = i->ApplyEdgeTransform(search_position);
