@@ -70,10 +70,10 @@ void StructuredPointCloudChain::SetBodyToRdf(Matrix3 const& body_to_rdf) {
 void StructuredPointCloudChain::UpdateEdge(uint32_t index, Matrix4 const& relative_transform) {
   chain.at(index).edge = relative_transform;
   chain.at(index).edge_rotation_only = relative_transform.block<3,3>(0,0);
-  if (index = 0) {
-    chain.at(0).edge_rdf = _body_to_rdf_4 * relative_transform;
-    chain.at(0).edge_rdf_rotation_only = _body_to_rdf * relative_transform.block<3,3>(0,0);
-  }
+//  if (index = 0) {
+//    chain.at(0).edge_rdf = _body_to_rdf_4 * relative_transform;
+//    chain.at(0).edge_rdf_rotation_only = _body_to_rdf * relative_transform.block<3,3>(0,0);
+//  }
   chain.at(index).edge_rdf = _body_to_rdf_4 *  relative_transform * _body_to_rdf_4_inverse;
   chain.at(index).edge_rdf_rotation_only = _body_to_rdf * relative_transform.block<3,3>(0,0) * _body_to_rdf_inverse;
 }
@@ -101,12 +101,12 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
   	return reply;
   }
 
-  Vector3 search_position = args.query_point_current_body_frame;
-  Vector3 search_position_rdf = _body_to_rdf * search_position;
+  Vector3 search_position_rdf = _body_to_rdf * args.query_point_current_body_frame; // not currently in rdf, but will be after first transform
+  //Vector3 search_position_rdf = _body_to_rdf * search_position;
 
 
-  Vector3 sigma = args.axis_aligned_linear_covariance;
-  Vector3 sigma_rdf = _body_to_rdf * sigma;
+  Vector3 sigma_rdf = _body_to_rdf * args.axis_aligned_linear_covariance; // also not currently but will be
+  //Vector3 sigma_rdf = _body_to_rdf * sigma;
 
   NanoMapFovStatus first_fov_status;
   uint32_t first_frame_id;
@@ -115,9 +115,12 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
 
   // search through chain
+  int num_history = 0;
   for (auto i = chain.cbegin(); i != chain.cend(); ++i) { 
-  	// transform to previous body frame
+    num_history++;	
+    // transform to previous body frame
   	search_position_rdf = i->ApplyEdgeTransform(search_position_rdf, i->edge_rdf);
+    std::cout << num_history << " " << search_position_rdf.transpose() << std::endl;
     sigma_rdf           = i->ApplyEdgeRotation(sigma_rdf, i->edge_rdf_rotation_only);
     //double sigma_each_direction = 0.013; // sigma increase up to 2 meters over 150
     sigma_rdf           = sigma_rdf + Vector3(0.1, 0.1, 0.1);
@@ -139,7 +142,8 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
 
   	// if free, do NN and return
     if (fov_status == NanoMapFovStatus::free_space || args.early_exit) {
-  		i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
+  		std::cout << num_history << std::endl;
+                i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(search_position_rdf[0], search_position_rdf[1], search_position_rdf[2]);
   		std::vector<pcl::PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
   		std::vector<Vector3> return_points;
   		if (closest_pts.size() > 0) {
@@ -158,7 +162,7 @@ NanoMapKnnReply StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const& args) 
  	  }
 
   }
-
+  std::cout << "none" << std::endl;
   chain.at(0).vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(first_search_position_rdf[0], first_search_position_rdf[1], first_search_position_rdf[2]);
 
   std::vector<pcl::PointXYZ> closest_pts = chain.at(0).vertex->kd_tree_.closest_pts;
