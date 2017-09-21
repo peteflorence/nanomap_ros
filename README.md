@@ -48,14 +48,15 @@ NanoMap is particularly fast for low amounts of motion planning queries (< ~10,0
 <p align="center">
   <img src="./docs/n_queries.png" width="450"/>
 </p>
-On single-core of an Intel Skylake i7.  Error bars are shown as standard error of the mean.  Docker image with all packages buildable inside provided at: <https://hub.docker.com/r/flamitdraper/mapping/> 
-
 
 Nanomap is two to four orders of magnitude faster than these other benchmarked packages at rebuilding its data structure upon receiving updated pose history information.
+
 
 <p align="center">
   <img src="./docs/n_poses.png" width="450"/>
 </p>
+
+(On single-core of an Intel Skylake i7.  Error bars are shown as standard error of the mean.  Docker image with all packages buildable inside provided: <https://hub.docker.com/r/flamitdraper/mapping/> )
 
 ### Required Dependencies
 
