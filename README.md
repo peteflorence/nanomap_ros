@@ -1,5 +1,5 @@
 # NanoMap
-## : Fast, Uncertainty-Aware Proximity Queries with Lazy Search of Local 3D Data
+## Fast, Uncertainty-Aware Proximity Queries with Lazy Search of Local 3D Data
 
 NanoMap is an algorithm and data structure that enables uncertainty-aware proximity queries for planning.
 
