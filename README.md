@@ -33,6 +33,25 @@ This ros node has been tested on:
 - ROS Kinetic on Ubuntu 16.04
 - ROS Indigo on Ubuntu 14.04
 
+### Benchmarking
+
+NanoMap is particularly fast for low amounts of motion planning queries (< ~10,000), due to its low data structure build time.  Fusion-based voxel structures take longer to build but have faster query times, causing them to be faster for > ~10,000 queries.
+
+<object data="./docs/n_queries.pdf" type="application/pdf" width="400px">
+    <embed src="./docs/n_queries.pdf">
+        This browser does not support PDFs. Please download the PDF to view it: <a href="./docs/n_queries.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+*On single-core of an Intel Skylake i7.  Error bars are shown as standard error of the mean.  Docker image with all packages buildable inside provided at: [https://hub.docker.com/r/flamitdraper/mapping/](https://hub.docker.com/r/flamitdraper/mapping/).*
+
+Nanomap is two to four orders of magnitude faster than these other benchmarked packages at rebuilding its data structure upon receiving updated pose history information.
+
+<object data="./docs/n_queries.pdf" type="application/pdf" width="400px">
+    <embed src="./docs/n_queries.pdf">
+        This browser does not support PDFs. Please download the PDF to view it: <a href="./docs/n_queries.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+
 ### Required Dependencies
 
 - Nanoflann (included as nanoflann_two.hpp)
