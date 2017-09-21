@@ -6,6 +6,9 @@ NanoMap is an algorithm and data structure that enables uncertainty-aware proxim
 ---
 
   * [video description](https://www.youtube.com/watch?v=zWAs_Djd_hA)
+
+
+  [![NanoMap](http://img.youtube.com/vi/zWAs_Djd_hA/0.jpg)](https://www.youtube.com/watch?v=zWAs_Djd_hA)
   
 
 ### Quickstart
@@ -56,4 +59,4 @@ A particularly useful debug print is in `NanoMapDebugPrintState()` in `nanomap.c
 
 ## Contact
 
-Contact <peteflo@csail.mit.edu> / / [peteflorence.com](http://peteflorence.com) for more information. 
+Contact <peteflo@csail.mit.edu> / [peteflorence.com](http://peteflorence.com) for more information. 
