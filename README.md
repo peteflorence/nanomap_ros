@@ -82,6 +82,14 @@ The top of `nanomap_types.h` has `#define NANOMAP_DEBUG_PRINT false`.  Changing 
 
 A particularly useful debug print is in `NanoMapDebugPrintState()` in `nanomap.cc`.  Often I will turn the first line of this function to `if (1)` in order to print regular status.
 
+## Contributors
+
+- [Pete Florence](github.com/peteflorence)
+- [John Carter](github.com/psiorx)
+- [Jake Ware](github.com/jakeware)
+- [Russ Tedrake](github.com/RussTedrake)
+
+
 ## Contact
 
 Contact <peteflo@csail.mit.edu> / [peteflorence.com](http://peteflorence.com) for more information. 
