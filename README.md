@@ -11,6 +11,14 @@ NanoMap is an algorithm and data structure that enables uncertainty-aware proxim
   [![NanoMap](http://img.youtube.com/vi/zWAs_Djd_hA/0.jpg)](https://www.youtube.com/watch?v=zWAs_Djd_hA)
   
 
+### Features
+
+Key features of NanoMap include:
+- Incorporates frame-specific uncertainty (due to modeled local pose uncertainty) returned along with query point
+- Query algorithm returns k-nearest-neighbors from most recent view of query point
+- Updates pose history information 2-4 orders of magnitude faster than fusion-based voxel packages
+- Particularly fast for low amounts of queries (<10,000)
+
 ### Quickstart
 
 ```
@@ -37,20 +45,16 @@ This ros node has been tested on:
 
 NanoMap is particularly fast for low amounts of motion planning queries (< ~10,000), due to its low data structure build time.  Fusion-based voxel structures take longer to build but have faster query times, causing them to be faster for > ~10,000 queries.
 
-<object data="./docs/n_queries.pdf" type="application/pdf" width="400px">
-    <embed src="./docs/n_queries.pdf">
-        This browser does not support PDFs. Please download the PDF to view it: <a href="./docs/n_queries.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+<p align="center">
+  <img src="./docs/n_queries.png" width="450"/>
+</p>
 *On single-core of an Intel Skylake i7.  Error bars are shown as standard error of the mean.  Docker image with all packages buildable inside provided at: [https://hub.docker.com/r/flamitdraper/mapping/](https://hub.docker.com/r/flamitdraper/mapping/).*
 
 Nanomap is two to four orders of magnitude faster than these other benchmarked packages at rebuilding its data structure upon receiving updated pose history information.
 
-<object data="./docs/n_queries.pdf" type="application/pdf" width="400px">
-    <embed src="./docs/n_queries.pdf">
-        This browser does not support PDFs. Please download the PDF to view it: <a href="./docs/n_queries.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+<p align="center">
+  <img src="./docs/n_poses.png" width="450"/>
+</p>
 
 ### Required Dependencies
 
