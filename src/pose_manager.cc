@@ -1,6 +1,7 @@
 #include "pose_manager.h"
 
 void PoseManager::AddPose(NanoMapPose const& pose) {
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Adding pose, previous poses.size() " << poses.size() << std::endl;}
 	size_t poses_size = poses.size();
 	if (poses_size <= 0) {
 		poses.push_front(pose);
@@ -23,6 +24,8 @@ void PoseManager::AddPose(NanoMapPose const& pose) {
 	}
 
 	if (NANOMAP_DEBUG_PRINT){CheckMonotonic();}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "Added pose, now poses.size() " << poses.size() << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){PrintAllPosePositions();}
 }
 
 void PoseManager::CheckMonotonic() const {
@@ -58,23 +61,28 @@ void PoseManager::DeleteMemoryBeforeTime(NanoMapTime const& delete_time) {
 	}
 }
 
+// delete in between times, inclusive
 void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, NanoMapTime const& time_after) {
-	if (NANOMAP_DEBUG_PRINT){std::cout << "deleting poses" << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "deleting poses, starting with " << poses.size() << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){PrintAllPosePositions();}
 	if (poses.size() <= 0) {
 		return;
 	}
 
 	int num_deleted = 0;
-	for (size_t i = 0; i < poses.size(); i++) {
+	for (size_t i = 0; i < poses.size()+num_deleted; i++) {
 		// iterating over poses from newest to oldest
+		if (NANOMAP_DEBUG_PRINT){std::cout << poses.at(i-num_deleted).time.nsec << " is time of pose in pose manager" << std::endl;}
 
 		// if pose is too new, continue
 		if (poses.at(i-num_deleted).time.GreaterThan(time_after)) {
+			if (NANOMAP_DEBUG_PRINT){std::cout << " too new " << std::endl;}
 			continue;
 		}
 
 		// if pose is too old, break
 		if (time_before.GreaterThan(poses.at(i-num_deleted).time)) {
+			if (NANOMAP_DEBUG_PRINT){std::cout << " too old " << std::endl;}
 			break;
 		}
 
@@ -82,6 +90,8 @@ void PoseManager::DeleteMemoryInBetweenTime(NanoMapTime const& time_before, Nano
 		poses.erase(poses.begin() + (i-num_deleted));
 		num_deleted++;
 	}
+	if (NANOMAP_DEBUG_PRINT){std::cout << "deleted poses, ending with " << poses.size() << std::endl;}
+	if (NANOMAP_DEBUG_PRINT){PrintAllPosePositions();}
 }
 
 NanoMapTime PoseManager::GetMostRecentPoseTime() const {
@@ -257,4 +267,11 @@ Matrix4 PoseManager::InvertTransform(Matrix4 const& transform) {
   inverted_transform.block<3,3>(0,0) = R.transpose();
   inverted_transform.block<3,1>(0,3) = -1.0 * R.transpose() * t;
   return inverted_transform;
+}
+
+void PoseManager::PrintAllPosePositions() {
+	int num_poses = poses.size();
+	for (int i = 0; i < num_poses; i++) {
+		std::cout << poses.at(i).position.transpose() << " at time " << poses.at(i).time.nsec << std::endl;
+	}
 }

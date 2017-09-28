@@ -21,6 +21,7 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
 }
 
 void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "In AddPoseUpdates" << std::endl;}
   // check at least 2 poses in pose updates
   if (pose_updates.size() < 2) {
     if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates of 2 or more at a time (for interpolation purposes)" << std::endl;}
@@ -40,7 +41,15 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     return;
   }
 
+  if (NANOMAP_DEBUG_PRINT){
+    std::cout << "Printing all pose updates" << std::endl;
+    for (int i = 0; i < pose_updates.size(); i++) {
+      std::cout << i << " " << pose_updates.at(i).position.transpose() << " at time " << pose_updates.at(i).time.nsec << std::endl;
+    }
+  }
+
   // delete previous poses in this time frame 
+  if (NANOMAP_DEBUG_PRINT){std::cout << "DeleteMemoryInBetweenTime " << pose_updates.back().time.nsec << " " << pose_updates.front().time.nsec << std::endl;}
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
 
   // add updated poses
@@ -54,6 +63,7 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
 
   // update only transforms contained entirely within time range
   UpdateChainInBetweenTimes(pose_updates.back().time, pose_updates.front().time);
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPoseUpdates" << std::endl;}
 }
 
 void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
@@ -132,6 +142,7 @@ void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapT
     // otherwise, update correct edge
     Matrix4 edge_update = pose_manager.GetRelativeTransformFromTo(time_newer_point_cloud, time_older_point_cloud);
     structured_point_cloud_chain.UpdateEdge(i+1, edge_update);
+    if (NANOMAP_DEBUG_PRINT){std::cout << "Updated edge " << i+1 << std::endl;}
   }
 }
 

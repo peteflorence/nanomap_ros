@@ -17,30 +17,81 @@ NanoMap NanoMapDefaults() {
   return nanomap;
 }
 
-TEST(UpdatePoses, VerifyAddingEdges)
+void AddZeroPoses(NanoMap& nanomap, int num_poses) {
+  NanoMapTime nm_time(0, 0);
+  NanoMapPose nm_pose(Vector3(0.0, 0.0, 0.0), Quat(0,0,0,1), nm_time);
+  for (int i = 0; i < num_poses; i++) {
+    nm_time.nsec = i;
+    nm_pose.position = Vector3(0.0, 0.0, 0.0);
+    nm_pose.time = nm_time;
+    nanomap.AddPose(nm_pose);
+  }
+}
+
+void AddMovingPoses(NanoMap& nanomap, int num_poses) {
+  NanoMapTime nm_time(0, 0);
+  NanoMapPose nm_pose(Vector3(0.0, 0.0, 0.0), Quat(0,0,0,1), nm_time);
+  for (int i = 0; i < num_poses; i++) {
+    nm_pose.time.nsec = i;
+    nm_pose.position = Vector3(0.1*i, 0.0, 0.0);
+    nanomap.AddPose(nm_pose);
+  }
+}
+
+void AddEmptyPointClouds(NanoMap& nanomap, int num_point_clouds) {
+  NanoMapTime nm_time(0, 0);
+  for (int i = 0; i < num_point_clouds; i++) {
+    nm_time.nsec = i;
+    pcl::PointCloud<pcl::PointXYZ> empty_cloud;
+    PointCloudPtr empty_cloud_ptr = empty_cloud.makeShared();
+    nanomap.AddPointCloud(empty_cloud_ptr, nm_time, i);
+  }
+}
+
+void AddUpdatePoses(NanoMap& nanomap, int num_poses) {
+  std::vector<NanoMapPose> smoothed_poses;
+  NanoMapTime nm_time(0, 0);
+  NanoMapPose nm_pose(Vector3(0.0, 0.0, 0.0), Quat(0,0,0,1), nm_time);
+  for (size_t i = 0; i < num_poses; i++) {
+    nm_pose.time.nsec = i;
+    Scalar x_pos = 10.0 + 0.01*i;
+    nm_pose.position = Vector3(x_pos, 0.0, 0.0);
+    smoothed_poses.push_back(nm_pose);
+  }
+  nanomap.AddPoseUpdates(smoothed_poses);
+}
+
+TEST(AddNewData, VerifyAddingEdges)
 {
   int num_point_clouds = 100;
   NanoMap nanomap = NanoMapDefaults();
-  NanoMapTime nm_time(0, 0);
-  NanoMapPose nm_pose(Vector3(0.0, 0.0, 0.0), Quat(0,0,0,1), nm_time);
-
-  // add poses
-  for (int i = 0; i < num_point_clouds; i++) {
-	  nm_time.nsec = i;
-  	nm_pose.position = Vector3(0.1, 0.0, 0.0);
-  	nm_pose.time = nm_time;
-  	nanomap.AddPose(nm_pose);
-  }
-
-  // add pointclouds
-  for (int i = 0; i < num_point_clouds; i++) {
-  	nm_time.nsec = i;
-  	pcl::PointCloud<pcl::PointXYZ> empty_cloud;
-    PointCloudPtr empty_cloud_ptr = empty_cloud.makeShared();
-  	nanomap.AddPointCloud(empty_cloud_ptr, nm_time, i);
-  }
+  AddZeroPoses(nanomap, num_point_clouds);
+  AddEmptyPointClouds(nanomap, num_point_clouds);
   std::vector<Matrix4> current_edges = nanomap.GetCurrentEdges();
   ASSERT_EQ(current_edges.size(), num_point_clouds);
+}
+
+void NoJumps(std::vector<Matrix4> edges) {
+  int edges_size = edges.size();
+  for (int i = 0; i < edges_size; i++) {
+    std::cout << "edge at " << i << " " << edges.at(i) << std::endl; 
+  }
+  ASSERT_TRUE(true);
+}
+
+
+TEST(UpdatePoses, VerifyNoJump)
+{
+  int num_point_clouds = 10;
+  NanoMap nanomap = NanoMapDefaults();
+  AddMovingPoses(nanomap, num_point_clouds);
+  AddEmptyPointClouds(nanomap, num_point_clouds);
+  std::vector<Matrix4> current_edges = nanomap.GetCurrentEdges();
+  NoJumps(current_edges);
+  AddUpdatePoses(nanomap, 5);
+  std::vector<Matrix4> updated_edges = nanomap.GetCurrentEdges();
+  NoJumps(updated_edges);
+  std::cout << "Finished VerifyNoJump" << std::endl;
 }
 
 // Declare another test
