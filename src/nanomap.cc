@@ -51,7 +51,7 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
   // grab oldest pose time we care about, before deleting anything
   NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
 
-  // delete previous poses in this time frame 
+  // delete previous poses in this time frame, inclusive
   if (NANOMAP_DEBUG_PRINT){std::cout << "DeleteMemoryInBetweenTime " << pose_updates.back().time.nsec << " " << pose_updates.front().time.nsec << std::endl;}
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
 
@@ -64,7 +64,7 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     pose_manager.AddPose(pose_updates.at(i));
   }
 
-  // update only transforms contained entirely within time range
+  // update only transforms contained entirely within time range, inclusive
   UpdateChainInBetweenTimes(pose_updates.back().time, pose_updates.front().time);
   if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPoseUpdates" << std::endl;}
 }
@@ -130,10 +130,12 @@ void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapT
   if (NANOMAP_DEBUG_PRINT){std::cout << "Entering UpdateChainInBetweenTimes" << std::endl;}
   size_t chain_size = structured_point_cloud_chain.GetChainSize();
   if (chain_size < 2) {return;}
+
+  // check for matching case
   for (int i = 0; i < (chain_size - 1); i++) {
     // if older point cloud time is before time_before, continue
     NanoMapTime time_older_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i+1);
-    if (time_before.GreaterThan(time_older_point_cloud)) {
+    if (time_before.GreaterThan(time_older_point_cloud) && !time_before.SameAs(time_older_point_cloud)) {
       continue;
     }
 

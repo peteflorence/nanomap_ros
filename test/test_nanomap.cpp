@@ -22,7 +22,6 @@ void AddZeroPoses(NanoMap& nanomap, int num_poses) {
   NanoMapPose nm_pose(Vector3(0.0, 0.0, 0.0), Quat(0,0,0,1), nm_time);
   for (int i = 0; i < num_poses; i++) {
     nm_time.nsec = i;
-    nm_pose.position = Vector3(0.0, 0.0, 0.0);
     nm_pose.time = nm_time;
     nanomap.AddPose(nm_pose);
   }
@@ -71,7 +70,40 @@ TEST(AddNewData, VerifyAddingEdges)
   ASSERT_EQ(current_edges.size(), num_point_clouds);
 }
 
-void NoJumps(std::vector<Matrix4> edges) {
+void VerifyNoTranslations(std::vector<Matrix4> edges) {
+  double max_expected = 0.00001;
+  int edges_size = edges.size();
+  for (int i = 0; i < edges_size; i++) {
+    Vector3 translation = edges.at(i).block<3,1>(0,3);
+    ASSERT_TRUE(translation.norm() < max_expected);
+  }
+}
+
+void VerifyAllTranslations(std::vector<Matrix4> edges) {
+  double min_expected = 0.00001;
+  int edges_size = edges.size();
+  // start at edge 1, not 0, because first edge is transform from current pose to last point cloud,
+  // and this should actually be 0
+  for (int i = 1; i < edges_size; i++) {
+    Vector3 translation = edges.at(i).block<3,1>(0,3);
+    ASSERT_TRUE(translation.norm() > min_expected);
+  }
+}
+
+TEST(UpdatePoses, VerifyCanUpdateAll)
+{
+  int num_point_clouds = 100;
+  NanoMap nanomap = NanoMapDefaults();
+  AddZeroPoses(nanomap, num_point_clouds);
+  AddEmptyPointClouds(nanomap, num_point_clouds);
+  std::vector<Matrix4> current_edges = nanomap.GetCurrentEdges();
+  VerifyNoTranslations(current_edges);
+  AddUpdatePoses(nanomap, num_point_clouds);
+  std::vector<Matrix4> updated_edges = nanomap.GetCurrentEdges();
+  VerifyAllTranslations(updated_edges);
+}
+
+void VerifyNoJumps(std::vector<Matrix4> edges) {
   double max_expected = 1.0;
   int edges_size = edges.size();
   for (int i = 0; i < edges_size; i++) {
@@ -88,10 +120,10 @@ TEST(UpdatePoses, VerifyNoJump)
   AddMovingPoses(nanomap, num_point_clouds);
   AddEmptyPointClouds(nanomap, num_point_clouds);
   std::vector<Matrix4> current_edges = nanomap.GetCurrentEdges();
-  NoJumps(current_edges);
+  VerifyNoJumps(current_edges);
   AddUpdatePoses(nanomap, 5);
   std::vector<Matrix4> updated_edges = nanomap.GetCurrentEdges();
-  NoJumps(updated_edges);
+  VerifyNoJumps(updated_edges);
 }
 
 // Run all the tests that were declared with TEST()
