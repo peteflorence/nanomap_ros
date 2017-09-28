@@ -4,9 +4,9 @@
 #include <iostream>
 
 #include <Eigen/Dense>
-#include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl_conversions/pcl_conversions.h>
 
 typedef double Scalar;
 typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
@@ -19,42 +19,51 @@ typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PointCloudPtr;
 #define NANOMAP_DEBUG_PRINT false
 
 struct NanoMapKnnArgs {
-  Vector3               query_point_current_body_frame;
-  Vector3               axis_aligned_linear_covariance;
-  bool                  early_exit;
+  Vector3 query_point_current_body_frame;
+  Vector3 axis_aligned_linear_covariance;
+  bool early_exit;
 };
 
-enum class NanoMapFovStatus { 
+enum class NanoMapFovStatus {
   not_initialized,
-	empty_memory,
-	behind,
-	laterally_outside_fov, 
-	beyond_sensor_horizon, 
-	occluded, 
-	free_space
+  empty_memory,
+  behind,
+  laterally_outside_fov,
+  beyond_sensor_horizon,
+  occluded,
+  free_space
 };
 
-template<typename T>
-std::ostream& operator<<(typename std::enable_if<std::is_enum<T>::value, std::ostream>::type& stream, const T& e)
-{
+template <typename T>
+std::ostream &operator<<(
+    typename std::enable_if<std::is_enum<T>::value, std::ostream>::type &stream,
+    const T &e) {
   switch (e) {
-    case T::not_initialized:        return stream << "not_initialized";
-    case T::empty_memory:           return stream << "empty_memory";
-    case T::behind:                 return stream << "behind";
-    case T::laterally_outside_fov:  return stream << "laterally_outside_fov";
-    case T::beyond_sensor_horizon:  return stream << "beyond_sensor_horizon";
-    case T::occluded:               return stream << "occluded";
-    case T::free_space:             return stream << "free_space";
-    default:                        return stream << "[NANOMAPFOVSTATUS ENUM CLASS UNDEFINED]";
+  case T::not_initialized:
+    return stream << "not_initialized";
+  case T::empty_memory:
+    return stream << "empty_memory";
+  case T::behind:
+    return stream << "behind";
+  case T::laterally_outside_fov:
+    return stream << "laterally_outside_fov";
+  case T::beyond_sensor_horizon:
+    return stream << "beyond_sensor_horizon";
+  case T::occluded:
+    return stream << "occluded";
+  case T::free_space:
+    return stream << "free_space";
+  default:
+    return stream << "[NANOMAPFOVSTATUS ENUM CLASS UNDEFINED]";
   }
 }
 
 struct NanoMapKnnReply {
-  NanoMapFovStatus      fov_status;
-  uint32_t              frame_id;
-  Vector3               query_point_in_frame_id;
-  std::vector<Vector3>  closest_points_in_frame_id;
-  Vector3               axis_aligned_linear_covariance;
+  NanoMapFovStatus fov_status;
+  uint32_t frame_id;
+  Vector3 query_point_in_frame_id;
+  std::vector<Vector3> closest_points_in_frame_id;
+  Vector3 axis_aligned_linear_covariance;
 };
 
 struct NanoMapTime {
@@ -91,10 +100,10 @@ struct NanoMapPose {
     quaternion = set_quaternion;
     time = set_time;
   }
-  Vector3     position;
-  Quat        quaternion;
+  Vector3 position;
+  Quat quaternion;
   NanoMapTime time;
-  Vector3     incremental_transform_uncertainty;
+  Vector3 incremental_transform_uncertainty;
 };
 
 #endif
