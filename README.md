@@ -23,14 +23,24 @@ Key features of NanoMap include:
 
 ```
 	git clone https://github.com/peteflorence/nanomap_ros.git
-	cd nanomap_ros
-	catkin build
+	catkin_make  ## catkin build for catkin_tools, or catkin_make for catkin
+```
+Reccomend first testing your installation:
+```
+	catkin_make run_tests_nanomap_ros
 ```
 
-`benchmarking` branch contains an example, minimal node.
+Then there are two examples of minimal nodes, one is for benchmarking and performs queries:
 
 ```
 	rosrun nanomap_ros benchmarking_node
+
+```
+
+The other shows how to use the `nanomap_visualizer`:
+
+```
+	rosrun nanomap_ros visualization_node
 
 ```
 
@@ -75,6 +85,12 @@ The core of the code has no depdency on ROS.  The only parts that have ROS depen
 - `benchmarking_node.cpp`
 
 I have provided this as a ros package since that is how it has been used and tested.  If you would like to use this without ros, it would just need a ros-independent CMakeLists.txt / incorporate into other build system.
+
+## Testing
+
+```
+    catkin_make run_tests_nanomap_ros 
+```
 
 ## Debugging NanoMap
 
