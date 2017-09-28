@@ -127,6 +127,7 @@ void NanoMap::UpdateChainWithLatestPose() {
 }
 
 void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapTime const& time_after) {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Entering UpdateChainInBetweenTimes" << std::endl;}
   size_t chain_size = structured_point_cloud_chain.GetChainSize();
   if (chain_size < 2) {return;}
   for (int i = 0; i < (chain_size - 1); i++) {
@@ -139,7 +140,7 @@ void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapT
     // if newer point cloud time is after time_after, break
     NanoMapTime time_newer_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i);
     if (time_newer_point_cloud.GreaterThan(time_after)) {
-      break;
+      continue;
     }
 
     // otherwise, update correct edge
@@ -147,6 +148,7 @@ void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapT
     structured_point_cloud_chain.UpdateEdge(i+1, edge_update);
     if (NANOMAP_DEBUG_PRINT){std::cout << "Updated edge " << i+1 << std::endl;}
   }
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting UpdateChainInBetweenTimes" << std::endl;}
 }
 
 void NanoMap::TryAddingPointCloudBufferToChain() {
