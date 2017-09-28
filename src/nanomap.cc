@@ -66,7 +66,8 @@ void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& c
   NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
   if (oldest_pose_time.GreaterThan(cloud_time)) {
     return;
-  } 
+  }
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Creating structured_point_cloud" << std::endl;} 
 
   // build structured_point_cloud and add to buffer
   StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, frame_id, fov_evaluator_ptr);
