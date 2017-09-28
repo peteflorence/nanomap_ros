@@ -48,6 +48,9 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     }
   }
 
+  // grab oldest pose time we care about, before deleting anything
+  NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
+
   // delete previous poses in this time frame 
   if (NANOMAP_DEBUG_PRINT){std::cout << "DeleteMemoryInBetweenTime " << pose_updates.back().time.nsec << " " << pose_updates.front().time.nsec << std::endl;}
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
@@ -55,7 +58,7 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
   // add updated poses
   size_t pose_updates_size = pose_updates.size();
   for (size_t i = 0; i < pose_updates_size; i++) {
-    if (pose_manager.GetOldestPoseTime().GreaterThan(pose_updates.at(i).time)) {
+    if (oldest_pose_time.GreaterThan(pose_updates.at(i).time)) {
       break;
     }
     pose_manager.AddPose(pose_updates.at(i));

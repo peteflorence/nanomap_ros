@@ -11,16 +11,23 @@ void PoseManager::AddPose(NanoMapPose const& pose) {
 	// new poses
 	if (pose.time.GreaterThan(poses.front().time)) {
 		poses.push_front(pose);
-		return;
 	}
 
 	// older poses
+	else if (poses.back().time.GreaterThan(pose.time)) {
+		poses.push_back(pose);
+		
+	}
+
+	else { 
+	// in between poses
 	for (size_t i = 0; i < poses_size; i++) {
 		if (pose.time.GreaterThan(poses.at(i).time)) {
 			//NanoMapPose array[] = {}; 
 			poses.insert(poses.begin() + i, pose);
 			return;
 		}
+	}
 	}
 
 	if (NANOMAP_DEBUG_PRINT){CheckMonotonic();}
