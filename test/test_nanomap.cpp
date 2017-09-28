@@ -142,6 +142,27 @@ TEST(UpdatePoses, VerifyNoJump)
   VerifyNoJumps(updated_edges);
 }
 
+TEST(SetParams, CanSetHistoryLength)
+{
+  int num_point_clouds = 150;
+
+  int short_length = 10;
+  NanoMap nanomap_short = NanoMapDefaults();
+  nanomap_short.SetNumDepthImageHistory(short_length);
+  AddMovingPoses(nanomap_short, num_point_clouds);
+  AddEmptyPointClouds(nanomap_short, num_point_clouds);
+  std::vector<Matrix4> current_edges_short = nanomap_short.GetCurrentEdges();
+  ASSERT_EQ(current_edges_short.size(), short_length);
+
+  int long_length = 200;
+  NanoMap nanomap_long = NanoMapDefaults();
+  nanomap_long.SetNumDepthImageHistory(long_length);
+  AddMovingPoses(nanomap_long, num_point_clouds);
+  AddEmptyPointClouds(nanomap_long, num_point_clouds);
+  std::vector<Matrix4> current_edges_long = nanomap_long.GetCurrentEdges();
+  ASSERT_EQ(current_edges_long.size(), num_point_clouds);
+}
+
 // Run all the tests that were declared with TEST()
 int main(int argc, char **argv){
   testing::InitGoogleTest(&argc, argv);
