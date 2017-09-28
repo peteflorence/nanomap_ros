@@ -154,6 +154,7 @@ void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapT
 }
 
 void NanoMap::TryAddingPointCloudBufferToChain() {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "in TryAdding" << std::endl;}
   while (point_cloud_buffer.size() > 0) {
     StructuredPointCloudPtr new_cloud_ptr = point_cloud_buffer.at(0);
     NanoMapTime new_cloud_time = new_cloud_ptr->GetTime();
@@ -178,7 +179,8 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
       if (NANOMAP_DEBUG_PRINT){std::cout << "## new_edge " << new_edge << std::endl;} 
       if (NANOMAP_DEBUG_PRINT){std::cout << "## try to add edgevertex" << std::endl;}
       structured_point_cloud_chain.AddNextEdgeVertex(new_edge, new_cloud_ptr);
-      if (NANOMAP_DEBUG_PRINT){std::cout << "try to pop front of point_cloud_buffer" << std::endl;}
+      if (NANOMAP_DEBUG_PRINT){std::cout << "## pop front of point_cloud_buffer" << std::endl;}
+      if (NANOMAP_DEBUG_PRINT){std::cout << "## chain size " << structured_point_cloud_chain.GetChainSize()<< std::endl;}
 
       point_cloud_buffer.pop_front();
 

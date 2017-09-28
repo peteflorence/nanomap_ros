@@ -70,6 +70,22 @@ TEST(AddNewData, VerifyAddingEdges)
   ASSERT_EQ(current_edges.size(), num_point_clouds);
 }
 
+TEST(AddNewData, VerifyCanBufferPointClouds)
+{
+  int num_point_clouds = 5;
+  NanoMap nanomap = NanoMapDefaults();
+  AddZeroPoses(nanomap, 1);
+  AddEmptyPointClouds(nanomap, num_point_clouds);
+  std::vector<Matrix4> current_edges = nanomap.GetCurrentEdges();
+  ASSERT_EQ(current_edges.size(), 1);
+  AddZeroPoses(nanomap, 3);
+  current_edges = nanomap.GetCurrentEdges();
+  ASSERT_EQ(current_edges.size(), 3);
+  AddZeroPoses(nanomap, num_point_clouds);
+  current_edges = nanomap.GetCurrentEdges();
+  ASSERT_EQ(current_edges.size(), num_point_clouds);
+}
+
 void VerifyNoTranslations(std::vector<Matrix4> edges) {
   double max_expected = 0.00001;
   int edges_size = edges.size();
