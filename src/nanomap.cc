@@ -21,6 +21,7 @@ void NanoMap::AddPose(NanoMapPose const& pose) {
 }
 
 void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "In AddPoseUpdates" << std::endl;}
   // check at least 2 poses in pose updates
   if (pose_updates.size() < 2) {
     if (NANOMAP_DEBUG_PRINT){std::cout << "Can only handle pose updates of 2 or more at a time (for interpolation purposes)" << std::endl;}
@@ -40,20 +41,32 @@ void NanoMap::AddPoseUpdates(std::vector<NanoMapPose>& pose_updates) {
     return;
   }
 
-  // delete previous poses in this time frame 
+  if (NANOMAP_DEBUG_PRINT){
+    std::cout << "Printing all pose updates" << std::endl;
+    for (int i = 0; i < pose_updates.size(); i++) {
+      std::cout << i << " " << pose_updates.at(i).position.transpose() << " at time " << pose_updates.at(i).time.nsec << std::endl;
+    }
+  }
+
+  // grab oldest pose time we care about, before deleting anything
+  NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
+
+  // delete previous poses in this time frame, inclusive
+  if (NANOMAP_DEBUG_PRINT){std::cout << "DeleteMemoryInBetweenTime " << pose_updates.back().time.nsec << " " << pose_updates.front().time.nsec << std::endl;}
   pose_manager.DeleteMemoryInBetweenTime(pose_updates.back().time, pose_updates.front().time);
 
   // add updated poses
   size_t pose_updates_size = pose_updates.size();
   for (size_t i = 0; i < pose_updates_size; i++) {
-    if (pose_manager.GetOldestPoseTime().GreaterThan(pose_updates.at(i).time)) {
+    if (oldest_pose_time.GreaterThan(pose_updates.at(i).time)) {
       break;
     }
     pose_manager.AddPose(pose_updates.at(i));
   }
 
-  // update only transforms contained entirely within time range
+  // update only transforms contained entirely within time range, inclusive
   UpdateChainInBetweenTimes(pose_updates.back().time, pose_updates.front().time);
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting AddPoseUpdates" << std::endl;}
 }
 
 void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& cloud_time, uint32_t frame_id) {
@@ -66,7 +79,8 @@ void NanoMap::AddPointCloud(PointCloudPtr const& cloud_ptr, NanoMapTime const& c
   NanoMapTime oldest_pose_time = pose_manager.GetOldestPoseTime();
   if (oldest_pose_time.GreaterThan(cloud_time)) {
     return;
-  } 
+  }
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Creating structured_point_cloud" << std::endl;} 
 
   // build structured_point_cloud and add to buffer
   StructuredPointCloudPtr new_cloud_ptr = std::make_shared<StructuredPointCloud>(cloud_ptr, cloud_time, frame_id, fov_evaluator_ptr);
@@ -100,6 +114,7 @@ void NanoMap::SetCameraInfo(double bin, double width, double height, Matrix3 con
 
 void NanoMap::SetBodyToRdf(Matrix3 const& R_body_to_rdf) {
   fov_evaluator_ptr->SetBodyToRdf(R_body_to_rdf);
+  structured_point_cloud_chain.SetBodyToRdf(R_body_to_rdf);
   received_sensor_transform = true;
 }
 
@@ -113,28 +128,34 @@ void NanoMap::UpdateChainWithLatestPose() {
 }
 
 void NanoMap::UpdateChainInBetweenTimes(NanoMapTime const& time_before, NanoMapTime const& time_after) {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Entering UpdateChainInBetweenTimes" << std::endl;}
   size_t chain_size = structured_point_cloud_chain.GetChainSize();
   if (chain_size < 2) {return;}
+
+  // check for matching case
   for (int i = 0; i < (chain_size - 1); i++) {
     // if older point cloud time is before time_before, continue
     NanoMapTime time_older_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i+1);
-    if (time_before.GreaterThan(time_older_point_cloud)) {
+    if (time_before.GreaterThan(time_older_point_cloud) && !time_before.SameAs(time_older_point_cloud)) {
       continue;
     }
 
     // if newer point cloud time is after time_after, break
     NanoMapTime time_newer_point_cloud = structured_point_cloud_chain.GetCloudTimeAtIndex(i);
     if (time_newer_point_cloud.GreaterThan(time_after)) {
-      break;
+      continue;
     }
 
     // otherwise, update correct edge
     Matrix4 edge_update = pose_manager.GetRelativeTransformFromTo(time_newer_point_cloud, time_older_point_cloud);
     structured_point_cloud_chain.UpdateEdge(i+1, edge_update);
+    if (NANOMAP_DEBUG_PRINT){std::cout << "Updated edge " << i+1 << std::endl;}
   }
+  if (NANOMAP_DEBUG_PRINT){std::cout << "Exiting UpdateChainInBetweenTimes" << std::endl;}
 }
 
 void NanoMap::TryAddingPointCloudBufferToChain() {
+  if (NANOMAP_DEBUG_PRINT){std::cout << "in TryAdding" << std::endl;}
   while (point_cloud_buffer.size() > 0) {
     StructuredPointCloudPtr new_cloud_ptr = point_cloud_buffer.at(0);
     NanoMapTime new_cloud_time = new_cloud_ptr->GetTime();
@@ -159,7 +180,8 @@ void NanoMap::TryAddingPointCloudBufferToChain() {
       if (NANOMAP_DEBUG_PRINT){std::cout << "## new_edge " << new_edge << std::endl;} 
       if (NANOMAP_DEBUG_PRINT){std::cout << "## try to add edgevertex" << std::endl;}
       structured_point_cloud_chain.AddNextEdgeVertex(new_edge, new_cloud_ptr);
-      if (NANOMAP_DEBUG_PRINT){std::cout << "try to pop front of point_cloud_buffer" << std::endl;}
+      if (NANOMAP_DEBUG_PRINT){std::cout << "## pop front of point_cloud_buffer" << std::endl;}
+      if (NANOMAP_DEBUG_PRINT){std::cout << "## chain size " << structured_point_cloud_chain.GetChainSize()<< std::endl;}
 
       point_cloud_buffer.pop_front();
 

@@ -49,3 +49,20 @@ add_library( nanomap_ros src/nanomap.cc src/pose_manager.cc src/structured_point
 
 target_link_libraries( nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
 
+if(CATKIN_ENABLE_TESTING)
+  catkin_add_gtest(${PROJECT_NAME}-test
+    test/test_nanomap.cpp
+  )
+
+  target_link_libraries(${PROJECT_NAME}-test
+    ${PROJECT_NAME}
+    ${catkin_LIBRARIES}
+    ${GCOV_LIBRARY}
+  )
+endif() # CATKIN_ENABLE_TESTING
+
+add_executable( benchmarking_node example_nodes/benchmarking_node.cpp )
+target_link_libraries( benchmarking_node nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
+
+add_executable( visualization_node example_nodes/visualization_node.cpp )
+target_link_libraries( visualization_node nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
