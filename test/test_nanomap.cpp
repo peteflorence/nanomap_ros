@@ -72,11 +72,12 @@ TEST(AddNewData, VerifyAddingEdges)
 }
 
 void NoJumps(std::vector<Matrix4> edges) {
+  double max_expected = 1.0;
   int edges_size = edges.size();
   for (int i = 0; i < edges_size; i++) {
-    std::cout << "edge at " << i << " " << edges.at(i) << std::endl; 
+    Vector3 translation = edges.at(i).block<3,1>(0,3);
+    ASSERT_TRUE(translation.norm() < max_expected);
   }
-  ASSERT_TRUE(true);
 }
 
 
@@ -91,19 +92,11 @@ TEST(UpdatePoses, VerifyNoJump)
   AddUpdatePoses(nanomap, 5);
   std::vector<Matrix4> updated_edges = nanomap.GetCurrentEdges();
   NoJumps(updated_edges);
-  std::cout << "Finished VerifyNoJump" << std::endl;
 }
-
-// Declare another test
-// TEST(TestSuite, testCase2)
-// {
-// //<test things here, calling EXPECT_* and/or ASSERT_* macros as needed>
-// }
 
 // Run all the tests that were declared with TEST()
 int main(int argc, char **argv){
   testing::InitGoogleTest(&argc, argv);
-  //testing::internal::CaptureStdout();
-  std::cout << "My test" << std::endl;	
+  std::cout << "Running NanoMap tests" << std::endl;	
   return RUN_ALL_TESTS();
 }
