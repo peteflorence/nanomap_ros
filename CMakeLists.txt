@@ -61,5 +61,8 @@ if(CATKIN_ENABLE_TESTING)
   )
 endif() # CATKIN_ENABLE_TESTING
 
-add_executable( benchmarking_node src/benchmarking_node.cpp )
+add_executable( benchmarking_node example_nodes/benchmarking_node.cpp )
 target_link_libraries( benchmarking_node nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
+
+add_executable( visualization_node example_nodes/visualization_node.cpp )
+target_link_libraries( visualization_node nanomap_ros ${catkin_LIBRARIES} ${PCL_LIBRARIES} orocos-kdl)
