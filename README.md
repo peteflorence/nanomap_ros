@@ -5,10 +5,10 @@ NanoMap is an algorithm and data structure that enables uncertainty-aware proxim
 
 ---
 
-  * [video description](https://www.youtube.com/watch?v=zWAs_Djd_hA)
+  * [video description](https://www.youtube.com/watch?v=9a0eEscz1Cs)
 
 
-  [![NanoMap](http://img.youtube.com/vi/zWAs_Djd_hA/0.jpg)](https://www.youtube.com/watch?v=zWAs_Djd_hA)
+  [![NanoMap](http://img.youtube.com/vi/9a0eEscz1Cs/0.jpg)](https://www.youtube.com/watch?v=9a0eEscz1Cs)
   
 
 ### Features
