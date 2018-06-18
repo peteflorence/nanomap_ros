@@ -1,4 +1,5 @@
 #include "structured_point_cloud_chain.h"
+#include "pcl.h"
 
 #define num_nearest_neighbors 1
 
@@ -168,13 +169,13 @@ StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const &args) const {
       i->vertex->kd_tree_.SearchForNearest<num_nearest_neighbors>(
           search_position_rdf[0], search_position_rdf[1],
           search_position_rdf[2]);
-      std::vector<pcl::PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
+      std::vector<PointXYZ> closest_pts = i->vertex->kd_tree_.closest_pts;
       std::vector<Vector3> return_points;
       if (closest_pts.size() > 0) {
         for (size_t j = 0;
              j < std::min((int)closest_pts.size(), num_nearest_neighbors);
              j++) {
-          pcl::PointXYZ next_point = closest_pts[j];
+          PointXYZ next_point = closest_pts[j];
           Vector3 depth_position =
               Vector3(next_point.x, next_point.y, next_point.z);
           return_points.push_back(depth_position);
@@ -192,7 +193,7 @@ StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const &args) const {
       first_search_position_rdf[0], first_search_position_rdf[1],
       first_search_position_rdf[2]);
 
-  std::vector<pcl::PointXYZ> closest_pts =
+  std::vector<PointXYZ> closest_pts =
       chain.at(0).vertex->kd_tree_.closest_pts;
   if (0) {
     std::cout << "closest_pts.size() in nanomap kd_tree" << closest_pts.size()
@@ -205,7 +206,7 @@ StructuredPointCloudChain::KnnQuery(NanoMapKnnArgs const &args) const {
       if (0) {
         std::cout << "ADDING" << std::endl;
       }
-      pcl::PointXYZ next_point = closest_pts[j];
+      PointXYZ next_point = closest_pts[j];
       Vector3 depth_position =
           Vector3(next_point.x, next_point.y, next_point.z);
       return_points.push_back(depth_position);

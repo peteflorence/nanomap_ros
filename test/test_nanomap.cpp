@@ -41,7 +41,7 @@ void AddEmptyPointClouds(NanoMap& nanomap, int num_point_clouds) {
   NanoMapTime nm_time(0, 0);
   for (int i = 0; i < num_point_clouds; i++) {
     nm_time.nsec = i;
-    pcl::PointCloud<pcl::PointXYZ> empty_cloud;
+    PointCloud<PointXYZ> empty_cloud;
     PointCloudPtr empty_cloud_ptr = empty_cloud.makeShared();
     nanomap.AddPointCloud(empty_cloud_ptr, nm_time, i);
   }

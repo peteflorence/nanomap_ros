@@ -1,14 +1,11 @@
+#include "pcl.h"
 #include "nanoflann_two.hpp"
-
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
 
 #include <algorithm>
 
 template <typename T> struct PointCloudTwo {
 
-  std::vector<pcl::PointXYZ> pts;
+  std::vector<PointXYZ> pts;
 
   // Must return the number of data points
   inline size_t kdtree_get_point_count() const { return pts.size(); }
@@ -49,7 +46,7 @@ template <typename T> struct PointCloudTwo {
 
 template <typename num_t> class KDTreeTwo {
 public:
-  std::vector<pcl::PointXYZ> closest_pts;
+  std::vector<PointXYZ> closest_pts;
   std::vector<num_t> squared_distances;
 
   typedef nanoflann::KDTreeSingleIndexAdaptor<
@@ -63,17 +60,17 @@ public:
         index(3, cloud,
               nanoflann::KDTreeSingleIndexAdaptorParams(10 /* max leaf */)){};
 
-  void InitializeNew(pcl::PointCloud<pcl::PointXYZ>::Ptr const &xyz_cloud_new) {
+  void InitializeNew(PointCloud<PointXYZ>::Ptr const &xyz_cloud_new) {
     Initialize(xyz_cloud_new, true);
   }
 
-  void AddToKDTree(pcl::PointCloud<pcl::PointXYZ>::Ptr const &xyz_cloud_new) {
+  void AddToKDTree(PointCloud<PointXYZ>::Ptr const &xyz_cloud_new) {
     Initialize(xyz_cloud_new, false);
   }
 
   void Clear() { cloud.pts.clear(); }
 
-  void Initialize(pcl::PointCloud<pcl::PointXYZ>::Ptr const &xyz_cloud_new,
+  void Initialize(PointCloud<PointXYZ>::Ptr const &xyz_cloud_new,
                   bool clear) {
     using namespace std;
     using namespace nanoflann;

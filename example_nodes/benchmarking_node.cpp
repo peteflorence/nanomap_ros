@@ -33,10 +33,8 @@ void PointCloudCallback(const sensor_msgs::PointCloud2& msg) {
     return;
   }
 
-  pcl::PCLPointCloud2 cloud2_rdf;
-  pcl_conversions::toPCL(msg, cloud2_rdf);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_rdf(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromPCLPointCloud2(cloud2_rdf,*cloud_rdf);
+  PointCloud<PointXYZ>::Ptr cloud_rdf(new PointCloud<PointXYZ>);
+  fromSensorMsgsPointCloud2(msg,*cloud_rdf);
   NanoMapTime nm_time(msg.header.stamp.sec, msg.header.stamp.nsec);
   nanomap.AddPointCloud(cloud_rdf, nm_time, msg.header.seq);
 
