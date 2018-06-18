@@ -1,4 +1,5 @@
 #include "fov_evaluator.h"
+#include "pcl.h"
 
 Vector3 FovEvaluator::RotateToSensorFrame(Vector3 position_body_frame) {
   if (0) {
@@ -88,7 +89,7 @@ NanoMapFovStatus FovEvaluator::EvaluateFov(PointCloudPtr const &point_cloud_ptr,
   if (point_cloud_ptr == nullptr) {
     return NanoMapFovStatus::free_space;
   }
-  pcl::PointXYZ point = point_cloud_ptr->at(pi_x, pi_y);
+  PointXYZ point = point_cloud_ptr->at(pi_x, pi_y);
   if (std::isnan(point.z)) {
     return NanoMapFovStatus::free_space;
   }

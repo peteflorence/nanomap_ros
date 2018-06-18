@@ -3,6 +3,8 @@
 
 #include "nanomap_types.h"
 
+#include <deque>
+
 class PoseManager {
 public:
   void AddPose(NanoMapPose const &pose);

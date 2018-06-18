@@ -4,6 +4,8 @@
 #include "nanomap_types.h"
 #include "structured_point_cloud.h"
 
+#include <deque>
+
 struct EdgeVertex {
   Vector3 ApplyEdgeTransform(Vector3 const &p, Matrix4 const &transform) const;
   Vector3 ApplyEdgeRotation(Vector3 const &p, Matrix3 const &rotation) const;
